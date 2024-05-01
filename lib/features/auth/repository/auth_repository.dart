@@ -1,12 +1,13 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:isp_app/backend/services/auth/model/auth_user.dart';
-import 'package:isp_app/ui/views/otp_view.dart';
-
-part 'auth_provider.dart';
-part 'auth_exception.dart';
+import 'package:isp_app/common/repositories/image_storage_repository.dart';
+import 'package:isp_app/features/auth/repository/auth_exception.dart';
+import 'package:isp_app/features/auth/views/otp_view.dart';
+import 'package:isp_app/model/auth_user.dart';
 
 final authRepoProvider = Provider(
   (ref) => AuthRepository(
@@ -15,7 +16,7 @@ final authRepoProvider = Provider(
   ),
 );
 
-class AuthRepository implements AuthProvider {
+class AuthRepository {
   final FirebaseAuth auth;
   final FirebaseFirestore firestore;
   AuthRepository({
@@ -23,19 +24,18 @@ class AuthRepository implements AuthProvider {
     required this.firestore,
   });
 
-  @override
   Future<AuthUser?> getCurrentUserData() async {
-    AuthUser? user;
-    var userData =
-        await firestore.collection('users').doc(auth.currentUser?.uid).get();
+    AuthUser? userData;
+    User? currentUser = auth.currentUser;
 
-    if (userData.data() != null) {
-      user = AuthUser.fromMap(userData.data()!);
+    if (currentUser != null) {
+      final userFromDB =
+          await firestore.collection('users').doc(currentUser.uid).get();
+      userData = AuthUser.fromMap(userFromDB.data()!);
     }
-    return user;
+    return userData;
   }
 
-  @override
   Future<void> signInWithPhone(
     BuildContext context, {
     required String phoneNumber,
@@ -63,7 +63,6 @@ class AuthRepository implements AuthProvider {
     }
   }
 
-  @override
   void verifyOTP({
     required String verificationId,
     required String userOTP,
@@ -80,7 +79,6 @@ class AuthRepository implements AuthProvider {
     }
   }
 
-  @override
   Future<void> createUser({
     required String username,
     required String password,
@@ -107,7 +105,6 @@ class AuthRepository implements AuthProvider {
     }
   }
 
-  @override
   Future<AuthUser?> loginUser({
     required String username,
     required String password,
@@ -126,6 +123,35 @@ class AuthRepository implements AuthProvider {
     return user;
   }
 
+  void saveUserInformationToDb({
+    required String address,
+    required String noKtp,
+    required List<File?> photoRumah,
+    required ProviderRef ref,
+  }) async {
+    try {
+      final uid = auth.currentUser?.uid;
+      List<String> photoUrl = [
+        'https://png.pngitem.com/pimgs/s/649-6490124_katie-notopoulos-katienotopoulos-i-write-about-tech-round.png'
+      ];
+
+      photoUrl = await ref.read(imageStorageRepositoryProvider).uploadFiles(
+            ref: 'photoRumah/$uid',
+            files: photoRumah,
+          );
+
+      var user = AuthUser(
+        address: address,
+        noKtp: noKtp,
+        housePhotoUrl: photoUrl,
+      );
+
+      await firestore.collection('users').doc(uid).update(user.toMap());
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Stream<AuthUser> userData(String userId) {
     return firestore.collection('users').doc(userId).snapshots().map(
           (event) => AuthUser.fromMap(
@@ -134,7 +160,6 @@ class AuthRepository implements AuthProvider {
         );
   }
 
-  @override
   Future<void> sendPasswordReset(String password) async {
     try {
       final uid = auth.currentUser?.uid;
@@ -147,7 +172,6 @@ class AuthRepository implements AuthProvider {
     }
   }
 
-  @override
   Future<void> signOut() async {
     if (auth.currentUser != null) {
       await auth.signOut();

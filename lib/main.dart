@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:isp_app/backend/services/auth/controller/auth_controller.dart';
-import 'package:isp_app/ui/routes/router.dart';
-import 'package:isp_app/ui/views/dashboard_view.dart';
-import 'package:isp_app/ui/views/login_view.dart';
+import 'package:isp_app/common/routes/router.dart';
+import 'package:isp_app/common/widgets/error.dart';
+import 'package:isp_app/features/auth/controller/auth_controller.dart';
+import 'package:isp_app/features/auth/views/login_view.dart';
+import 'package:isp_app/features/dashboard/views/dashboard_view.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -42,9 +43,7 @@ class MyApp extends ConsumerWidget {
               return const DashboardView();
             },
             error: (err, trace) {
-              return Scaffold(
-                body: Center(child: Text('This page doesn\'t exist')),
-              );
+              return ErrorView(error: err.toString());
             },
             loading: () => const Scaffold(
               body: Center(

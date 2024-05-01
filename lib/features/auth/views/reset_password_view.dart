@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:isp_app/backend/services/auth/controller/auth_controller.dart';
-import 'package:isp_app/ui/views/login_view.dart';
+import 'package:isp_app/features/auth/controller/auth_controller.dart';
+import 'package:isp_app/features/auth/views/login_view.dart';
 
 class ResetPasswordView extends ConsumerStatefulWidget {
   const ResetPasswordView({Key? key}) : super(key: key);

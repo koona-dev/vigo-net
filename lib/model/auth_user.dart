@@ -1,26 +1,27 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class AuthUser extends Equatable {
   final String? id;
-  final String username;
-  final String password;
-  final String email;
-  final String phone;
-  final String name;
-  final String address;
-  final String noKtp;
-  final String housePhotoUrl;
+  final String? username;
+  final String? password;
+  final String? email;
+  final String? phone;
+  final String? name;
+  final String? address;
+  final String? noKtp;
+  final List<dynamic> housePhotoUrl;
 
   const AuthUser({
     this.id,
-    required this.username,
-    required this.password,
-    required this.email,
-    required this.phone,
-    required this.name,
-    this.address = '',
-    this.noKtp = '',
-    this.housePhotoUrl = '',
+    this.username,
+    this.password,
+    this.email,
+    this.phone,
+    this.name,
+    this.address,
+    this.noKtp,
+    this.housePhotoUrl = const [],
   });
 
   factory AuthUser.fromMap(Map<String, dynamic> data) {
@@ -33,7 +34,7 @@ class AuthUser extends Equatable {
       name: data['name'] ?? '',
       address: data['address'] ?? '',
       noKtp: data['noKtp'] ?? '',
-      housePhotoUrl: data['housePhotoUrl'] ?? '',
+      housePhotoUrl: data['housePhotoUrl'] ?? <String>[],
     );
   }
 
@@ -46,7 +47,7 @@ class AuthUser extends Equatable {
       'name': name,
       'address': address,
       'noKtp': noKtp,
-      'housePhotoUrl': housePhotoUrl,
+      'housePhotoUrl': FieldValue.arrayUnion(housePhotoUrl),
     };
   }
 

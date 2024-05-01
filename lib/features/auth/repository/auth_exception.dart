@@ -1,5 +1,3 @@
-part of 'auth_repository.dart';
-
 class UserNotFoundException implements Exception {}
 
 class WrongPasswordException implements Exception {}

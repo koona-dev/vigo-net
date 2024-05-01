@@ -1,7 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:isp_app/backend/services/auth/model/auth_user.dart';
-import 'package:isp_app/backend/services/auth/repository/auth_repository.dart';
+import 'package:isp_app/features/auth/repository/auth_repository.dart';
+import 'package:isp_app/model/auth_user.dart';
 
 final authControllerProvider = Provider((ref) {
   final authRepository = ref.watch(authRepoProvider);
@@ -72,6 +74,19 @@ class AuthController {
 
   void resetPassword(String password) {
     authRepository.sendPasswordReset(password);
+  }
+
+  void saveUserInformationToDb({
+    required String address,
+    required String noKtp,
+    required List<File?> photoRumah,
+  }) {
+    authRepository.saveUserInformationToDb(
+      address: address,
+      noKtp: noKtp,
+      photoRumah: photoRumah,
+      ref: ref,
+    );
   }
 
   void signOut() {

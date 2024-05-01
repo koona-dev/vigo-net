@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:isp_app/ui/views/dashboard_view.dart';
-import 'package:isp_app/ui/views/login_view.dart';
-import 'package:isp_app/ui/views/otp_view.dart';
-import 'package:isp_app/ui/views/register_view.dart';
-import 'package:isp_app/ui/views/reset_password_view.dart';
-import 'package:isp_app/ui/views/signin_phone_number_view.dart';
+import 'package:isp_app/common/widgets/error.dart';
+import 'package:isp_app/features/auth/views/login_view.dart';
+import 'package:isp_app/features/auth/views/otp_view.dart';
+import 'package:isp_app/features/auth/views/register_view.dart';
+import 'package:isp_app/features/auth/views/reset_password_view.dart';
+import 'package:isp_app/features/auth/views/signin_phone_number_view.dart';
+import 'package:isp_app/features/dashboard/views/dashboard_view.dart';
+import 'package:isp_app/features/profile/views/user_information_view.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -29,19 +31,22 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(
         builder: (context) => const RegisterView(),
       );
-    case DashboardView.routeName:
-      return MaterialPageRoute(
-        builder: (context) => const DashboardView(),
-      );
     case ResetPasswordView.routeName:
       return MaterialPageRoute(
         builder: (context) => const ResetPasswordView(),
       );
+    case DashboardView.routeName:
+      return MaterialPageRoute(
+        builder: (context) => const DashboardView(),
+      );
+    case UserInformationView.routeName:
+      return MaterialPageRoute(
+        builder: (context) => const UserInformationView(),
+      );
     default:
       return MaterialPageRoute(
-        builder: (context) => const Scaffold(
-          body: Center(child: Text('This page doesn\'t exist')),
-        ),
+        builder: (context) =>
+            const ErrorView(error: 'This page doesn\'t exist'),
       );
   }
 }

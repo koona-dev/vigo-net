@@ -1,42 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:isp_app/backend/services/auth/controller/auth_controller.dart';
-import 'package:isp_app/ui/views/dashboard_view.dart';
-import 'package:isp_app/ui/views/reset_password_view.dart';
-import 'package:isp_app/ui/views/signin_phone_number_view.dart';
+import 'package:isp_app/features/auth/controller/auth_controller.dart';
+import 'package:isp_app/features/auth/views/reset_password_view.dart';
+import 'package:isp_app/features/auth/views/signin_phone_number_view.dart';
+import 'package:isp_app/features/dashboard/views/dashboard_view.dart';
 
-class UserInformationView extends ConsumerStatefulWidget {
-  const UserInformationView({Key? key}) : super(key: key);
+class LoginView extends ConsumerStatefulWidget {
+  const LoginView({Key? key}) : super(key: key);
 
-  static const routeName = '/user-information';
+  static const routeName = '/login';
 
   @override
-  ConsumerState<UserInformationView> createState() =>
-      _UserInformationViewState();
+  ConsumerState<LoginView> createState() => _LoginViewState();
 }
 
-class _UserInformationViewState extends ConsumerState<UserInformationView> {
-  final _addressController = TextEditingController();
-  final _noKtpController = TextEditingController();
+class _LoginViewState extends ConsumerState<LoginView> {
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   @override
   void dispose() {
-    _addressController.dispose();
-    _noKtpController.dispose();
+    _usernameController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
   bool get isValueNotEmpty =>
-      _addressController.text != '' && _noKtpController.text != '';
+      _usernameController.text != '' && _passwordController.text != '';
 
   void _submitLogin() async {
     final result = await ref.read(authControllerProvider).loginUser(
-          username: _addressController.text,
-          password: _noKtpController.text,
+          username: _usernameController.text,
+          password: _passwordController.text,
         );
 
     if (result != null) {
-      Navigator.of(context).pushReplacementNamed(DashboardView.routeName);
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        DashboardView.routeName,
+        (route) => false,
+      );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -67,7 +69,7 @@ class _UserInformationViewState extends ConsumerState<UserInformationView> {
             ),
             SizedBox(height: 52),
             TextField(
-              controller: _addressController,
+              controller: _usernameController,
               decoration: InputDecoration(
                 labelText: 'Username',
                 border: OutlineInputBorder(),
@@ -76,7 +78,7 @@ class _UserInformationViewState extends ConsumerState<UserInformationView> {
             ),
             SizedBox(height: 16),
             TextField(
-              controller: _noKtpController,
+              controller: _passwordController,
               decoration: InputDecoration(
                 labelText: 'Password',
                 border: OutlineInputBorder(),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:isp_app/features/auth/controller/auth_controller.dart';
+import 'package:isp_app/features/catalog_product/views/catalog_product_view.dart';
 import 'package:isp_app/features/profile/views/user_information_view.dart';
 
 class DashboardView extends ConsumerStatefulWidget {
@@ -14,6 +16,8 @@ class DashboardView extends ConsumerStatefulWidget {
 class _DashboardViewState extends ConsumerState<DashboardView> {
   @override
   Widget build(BuildContext context) {
+    final user = ref.watch(userDataAuthProvider).value!;
+
     return Scaffold(
       appBar: AppBar(
         leading: CircleAvatar(
@@ -35,7 +39,10 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
                   Text(
                       'Kini internet cepat bisa dibeli mulai harga Rp. 199.000/bulan'),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(
+                          context, CatalogProductView.routeName);
+                    },
                     child: Text('Pilih Paket Internet'),
                   ),
                 ],
@@ -43,14 +50,16 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
             ),
           ),
           SizedBox(height: 24),
-          ListTile(
-            title: Text('Silahkan Lengkapi Data Diri Anda'),
-            subtitle: Text('Kelengkapan profil Anda 60%'),
-            trailing: Icon(Icons.navigate_next_sharp),
-            onTap: () {
-              Navigator.pushNamed(context, UserInformationView.routeName);
-            },
-          ),
+          user.address == null
+              ? ListTile(
+                  title: Text('Silahkan Lengkapi Data Diri Anda'),
+                  subtitle: Text('Kelengkapan profil Anda 60%'),
+                  trailing: Icon(Icons.navigate_next_sharp),
+                  onTap: () {
+                    Navigator.pushNamed(context, UserInformationView.routeName);
+                  },
+                )
+              : SizedBox.shrink(),
         ],
       ),
     );

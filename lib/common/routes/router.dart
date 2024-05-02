@@ -5,6 +5,7 @@ import 'package:isp_app/features/auth/views/otp_view.dart';
 import 'package:isp_app/features/auth/views/register_view.dart';
 import 'package:isp_app/features/auth/views/reset_password_view.dart';
 import 'package:isp_app/features/auth/views/signin_phone_number_view.dart';
+import 'package:isp_app/features/catalog_product/views/catalog_product_view.dart';
 import 'package:isp_app/features/dashboard/views/dashboard_view.dart';
 import 'package:isp_app/features/profile/views/user_information_view.dart';
 
@@ -42,6 +43,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case UserInformationView.routeName:
       return MaterialPageRoute(
         builder: (context) => const UserInformationView(),
+      );
+    case CatalogProductView.routeName:
+      return MaterialPageRoute(
+        builder: (context) => const CatalogProductView(),
       );
     default:
       return MaterialPageRoute(

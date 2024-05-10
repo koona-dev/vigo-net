@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isp_app/common/widgets/error.dart';
 import 'package:isp_app/features/catalog_product/controller/catalog_controller.dart';
+import 'package:isp_app/features/order_product/controller/order_product_controller.dart';
 
 class CatalogProductView extends ConsumerStatefulWidget {
   const CatalogProductView({Key? key}) : super(key: key);
@@ -13,8 +14,37 @@ class CatalogProductView extends ConsumerStatefulWidget {
 }
 
 class _CatalogProductViewState extends ConsumerState<CatalogProductView> {
+  _openCartDialog() {
+    ref.watch(catalogDataAuthProvider).value;
+    showBottomSheet(
+      context: context,
+      builder: (context) => Material(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('qty :'),
+                SizedBox(height: 8),
+                Text('Sub total :'),
+              ],
+            ),
+            SizedBox(width: 20),
+            FilledButton(
+              onPressed: () {},
+              child: Text('Checkout'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final counter = ref.watch(cartProvider.notifier).cart;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Menu Products'),
@@ -70,7 +100,12 @@ class _CatalogProductViewState extends ConsumerState<CatalogProductView> {
                                               'Rp ${internetList[index].price!}/bulan'),
                                           SizedBox(width: 20),
                                           FilledButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              ref
+                                                  .read(cartProvider.notifier)
+                                                  .selectInternet(
+                                                      internetList[index].id!);
+                                            },
                                             child: Text('BUY'),
                                           ),
                                         ],
@@ -85,7 +120,8 @@ class _CatalogProductViewState extends ConsumerState<CatalogProductView> {
                             itemCount: addonsList.length,
                             itemBuilder: (context, index) {
                               return Card(
-                                margin: const EdgeInsets.all(24),
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 24, vertical: 8),
                                 child: Padding(
                                   padding: const EdgeInsets.all(16),
                                   child: Row(
@@ -125,12 +161,32 @@ class _CatalogProductViewState extends ConsumerState<CatalogProductView> {
                                                 Row(
                                                   children: [
                                                     IconButton(
-                                                      onPressed: () {},
+                                                      onPressed:
+                                                          counter.addons[index]
+                                                                      .qty >
+                                                                  0
+                                                              ? () {
+                                                                  ref
+                                                                      .read(cartProvider
+                                                                          .notifier)
+                                                                      .addAddons(
+                                                                          addonsList[index]
+                                                                              .id!);
+                                                                }
+                                                              : null,
                                                       icon: Icon(Icons.remove),
                                                     ),
-                                                    Text('1'),
+                                                    Text(counter.toString()),
                                                     IconButton(
-                                                      onPressed: () {},
+                                                      onPressed: () {
+                                                        ref
+                                                            .read(cartProvider
+                                                                .notifier)
+                                                            .removeAddons(
+                                                                addonsList[
+                                                                        index]
+                                                                    .id!);
+                                                      },
                                                       icon: Icon(Icons.add),
                                                     ),
                                                   ],

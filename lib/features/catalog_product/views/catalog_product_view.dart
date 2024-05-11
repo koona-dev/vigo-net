@@ -14,36 +14,40 @@ class CatalogProductView extends ConsumerStatefulWidget {
 }
 
 class _CatalogProductViewState extends ConsumerState<CatalogProductView> {
-  _openCartDialog() {
-    ref.watch(catalogDataAuthProvider).value;
-    showBottomSheet(
-      context: context,
-      builder: (context) => Material(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('qty :'),
-                SizedBox(height: 8),
-                Text('Sub total :'),
-              ],
-            ),
-            SizedBox(width: 20),
-            FilledButton(
-              onPressed: () {},
-              child: Text('Checkout'),
-            ),
-          ],
+  void _openCartDialog(CartNotifier cartNotifier) {
+    if (cartNotifier.cart.internetId != null &&
+        cartNotifier.cart.addons.isNotEmpty) {
+      showBottomSheet(
+        context: context,
+        builder: (context) => Material(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('qty : ${cartNotifier.totalQtyAddons}'),
+                  SizedBox(height: 8),
+                  Text('Sub total : Rp.1550000'),
+                ],
+              ),
+              SizedBox(width: 20),
+              FilledButton(
+                onPressed: () {},
+                child: Text('Checkout'),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final counter = ref.watch(cartProvider.notifier).cart;
+    final cartNotifier = ref.watch(cartProvider.notifier);
+
+    print('CART PRODUCTS : ${cartNotifier.cart}');
 
     return Scaffold(
       appBar: AppBar(
@@ -105,6 +109,8 @@ class _CatalogProductViewState extends ConsumerState<CatalogProductView> {
                                                   .read(cartProvider.notifier)
                                                   .selectInternet(
                                                       internetList[index].id!);
+
+                                              _openCartDialog(cartNotifier);
                                             },
                                             child: Text('BUY'),
                                           ),
@@ -121,7 +127,9 @@ class _CatalogProductViewState extends ConsumerState<CatalogProductView> {
                             itemBuilder: (context, index) {
                               return Card(
                                 margin: const EdgeInsets.symmetric(
-                                    horizontal: 24, vertical: 8),
+                                  horizontal: 24,
+                                  vertical: 8,
+                                ),
                                 child: Padding(
                                   padding: const EdgeInsets.all(16),
                                   child: Row(
@@ -161,28 +169,40 @@ class _CatalogProductViewState extends ConsumerState<CatalogProductView> {
                                                 Row(
                                                   children: [
                                                     IconButton(
-                                                      onPressed:
-                                                          counter.addons[index]
-                                                                      .qty >
-                                                                  0
-                                                              ? () {
-                                                                  ref
-                                                                      .read(cartProvider
-                                                                          .notifier)
-                                                                      .addAddons(
-                                                                          addonsList[index]
-                                                                              .id!);
-                                                                }
-                                                              : null,
+                                                      onPressed: cartNotifier
+                                                                  .getQtyAddons(
+                                                                      addonsList[
+                                                                              index]
+                                                                          .id!) !=
+                                                              0
+                                                          ? () {
+                                                              ref
+                                                                  .read(cartProvider
+                                                                      .notifier)
+                                                                  .removeAddons(
+                                                                      addonsList[
+                                                                              index]
+                                                                          .id!);
+
+                                                              _openCartDialog(
+                                                                  cartNotifier);
+                                                            }
+                                                          : null,
                                                       icon: Icon(Icons.remove),
                                                     ),
-                                                    Text(counter.toString()),
+                                                    Text(
+                                                      cartNotifier
+                                                          .getQtyAddons(
+                                                              addonsList[index]
+                                                                  .id!)
+                                                          .toString(),
+                                                    ),
                                                     IconButton(
                                                       onPressed: () {
                                                         ref
                                                             .read(cartProvider
                                                                 .notifier)
-                                                            .removeAddons(
+                                                            .addAddons(
                                                                 addonsList[
                                                                         index]
                                                                     .id!);

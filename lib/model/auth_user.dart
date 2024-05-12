@@ -24,9 +24,12 @@ class AuthUser extends Equatable {
     this.housePhotoUrl = const [],
   });
 
-  factory AuthUser.fromMap(Map<String, dynamic> data) {
+  factory AuthUser.fromMap({
+    required String id,
+    required Map<String, dynamic> data,
+  }) {
     return AuthUser(
-      id: data['id'] ?? '',
+      id: id,
       username: data['username'] ?? '',
       password: data['password'] ?? '',
       email: data['email'] ?? '',

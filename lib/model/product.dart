@@ -29,9 +29,12 @@ class Internet extends Equatable {
     this.wilayah,
   });
 
-  factory Internet.fromMap(Map<String, dynamic> data) {
+  factory Internet.fromMap({
+    required String id,
+    required Map<String, dynamic> data,
+  }) {
     return Internet(
-      id: data['id'] ?? '',
+      id: id,
       title: data['title'] ?? '',
       deskripsi: data['deskripsi'] ?? '',
       price: data['price'] ?? 0,
@@ -66,9 +69,12 @@ class Addons extends Equatable {
     this.price,
   });
 
-  factory Addons.fromMap(Map<String, dynamic> data) {
+  factory Addons.fromMap({
+    required String id,
+    required Map<String, dynamic> data,
+  }) {
     return Addons(
-      id: data['id'] ?? '',
+      id: id,
       title: data['title'] ?? '',
       deskripsi: data['deskripsi'] ?? '',
       price: data['price'] ?? 0,

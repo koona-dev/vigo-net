@@ -31,7 +31,7 @@ class AuthRepository {
     if (currentUser != null) {
       final userFromDB =
           await firestore.collection('users').doc(currentUser.uid).get();
-      userData = AuthUser.fromMap(userFromDB.data()!);
+      userData = AuthUser.fromMap(id: userFromDB.id, data: userFromDB.data()!);
     }
     return userData;
   }
@@ -115,7 +115,7 @@ class AuthRepository {
         final data = doc.data();
 
         if (username == data?['username'] && password == data?['password']) {
-          return AuthUser.fromMap(data!);
+          return AuthUser.fromMap(id: doc.id, data: data!);
         }
       },
     );
@@ -155,7 +155,8 @@ class AuthRepository {
   Stream<AuthUser> userData(String userId) {
     return firestore.collection('users').doc(userId).snapshots().map(
           (event) => AuthUser.fromMap(
-            event.data()!,
+            id: event.id,
+            data: event.data()!,
           ),
         );
   }

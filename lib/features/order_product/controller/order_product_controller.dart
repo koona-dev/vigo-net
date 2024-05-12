@@ -2,63 +2,104 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isp_app/model/order.dart';
 
-class CartNotifier extends ChangeNotifier {
-  final cart = Cart();
-  int getQtyAddons(String addonsId) {
-    if (cart.addons.isEmpty) {
-      return 0;
-    } else {
-      final addons = cart.addons.firstWhere((addons) {
-        return addons.id == addonsId;
-      });
+enum ProductType { internet, addons }
 
-      return addons.qty;
+class CartNotifier extends ChangeNotifier {
+  final List<Cart> _cartItems = [];
+  List<Cart> get cartItems => _cartItems;
+
+  int getQtyProduct(String productId) {
+    notifyListeners();
+
+    if (_cartItems.isNotEmpty &&
+        _cartItems.any((element) => element.productId == productId)) {
+      final cart =
+          _cartItems.firstWhere((element) => element.productId == productId);
+      return cart.qty;
+    } else {
+      return 0;
     }
   }
 
-  int get totalQtyAddons =>
-      cart.addons.fold(0, (sum, addons) => sum + addons.qty);
+  int get totalQtyProduct =>
+      _cartItems.fold(0, (sum, product) => sum + product.qty);
 
-  // int get subTotalPrice {
-  //   final totalAddonsPrice =
-  //       cart.addons.fold(0, (sum, addons) => sum + addons.qty * addons.price);
-  //   final internetPrice = cart.internetId != null;
-  // }
+  int get subTotalPrice {
+    final totalPrice = _cartItems.fold(
+      0,
+      (sum, product) => sum + product.qty * product.price,
+    );
+    return totalPrice;
+  }
 
-  // Let's allow the UI to add cart.
-  void selectInternet(String internetId) {
-    if (internetId == cart.internetId) {
-      cart.internetId = null;
+  Cart? currentItems(String productId) {
+    if (_cartItems.any((element) => element.productId == productId)) {
+      return _cartItems.firstWhere((element) => element.productId == productId);
     } else {
-      cart.internetId = internetId;
+      return null;
+    }
+  }
+
+  // Let's allow the UI to add _cartItems.
+  void selectInternet({
+    required String internetId,
+    required int price,
+  }) {
+    final cartIdx =
+        _cartItems.indexWhere((element) => element.productId == internetId);
+
+    if (cartIdx < 0) {
+      _cartItems.removeWhere(
+          (element) => element.productType == ProductType.internet);
+
+      _cartItems.add(
+        Cart(
+          productId: internetId,
+          qty: 1,
+          price: price,
+          productType: ProductType.internet,
+        ),
+      );
+    } else {
+      _cartItems.removeAt(cartIdx);
     }
     notifyListeners();
   }
 
-  void addAddons(String addonsId) {
-    final newAddons = AddonsCart(
-      id: addonsId,
+  void addAddons({
+    required String addonsId,
+    required int price,
+  }) {
+    final newAddons = Cart(
+      productId: addonsId,
       qty: 1,
+      price: price,
+      productType: ProductType.addons,
     );
 
-    cart.addons.forEach((addons) {
-      if (addonsId == addons.id) {
-        addons.qty++;
-      } else {
-        cart.addons.add(newAddons);
-      }
-    });
+    if (_cartItems.isNotEmpty &&
+        _cartItems.any((element) => element.productId == addonsId)) {
+      final cart =
+          _cartItems.firstWhere((element) => element.productId == addonsId);
+      cart.incrementQuantity();
+    } else {
+      _cartItems.add(newAddons);
+    }
 
     notifyListeners();
   }
 
-  // Let's allow removing cart
+  // Let's allow removing _cartItems
   void removeAddons(String addonsId) {
-    cart.addons.forEach((addons) {
-      if (addonsId == addons.id) {
-        addons.qty--;
+    for (var cart in _cartItems) {
+      if (addonsId == cart.productId) {
+        if (cart.qty > 0) {
+          cart.decrementQuantity();
+        } else {
+          _cartItems.remove(cart);
+        }
       }
-    });
+    }
 
     notifyListeners();
   }

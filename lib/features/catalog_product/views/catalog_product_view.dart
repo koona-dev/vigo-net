@@ -14,32 +14,46 @@ class CatalogProductView extends ConsumerStatefulWidget {
 }
 
 class _CatalogProductViewState extends ConsumerState<CatalogProductView> {
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
   void _openCartDialog(CartNotifier cartNotifier) {
-    if (cartNotifier.cart.internetId != null &&
-        cartNotifier.cart.addons.isNotEmpty) {
-      showBottomSheet(
-        context: context,
-        builder: (context) => Material(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+    if (cartNotifier.cartItems != []) {
+      scaffoldKey.currentState?.showBottomSheet(
+        (context) => Container(
+          decoration: BoxDecoration(
+            border: Border.symmetric(
+              horizontal: BorderSide(color: Colors.grey),
+            ),
+          ),
+          child: IntrinsicHeight(
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('qty : ${cartNotifier.totalQtyAddons}'),
-                  SizedBox(height: 8),
-                  Text('Sub total : Rp.1550000'),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('qty : ${cartNotifier.totalQtyProduct}'),
+                      SizedBox(height: 8),
+                      Text('Sub total : ${cartNotifier.subTotalPrice}'),
+                    ],
+                  ),
+                  SizedBox(width: 20),
+                  FilledButton(
+                    onPressed: () {},
+                    child: Text('Checkout'),
+                  ),
                 ],
               ),
-              SizedBox(width: 20),
-              FilledButton(
-                onPressed: () {},
-                child: Text('Checkout'),
-              ),
-            ],
+            ),
           ),
         ),
+        enableDrag: false,
+        elevation: 2,
       );
+    } else {
+      Navigator.pop(context);
     }
   }
 
@@ -47,9 +61,8 @@ class _CatalogProductViewState extends ConsumerState<CatalogProductView> {
   Widget build(BuildContext context) {
     final cartNotifier = ref.watch(cartProvider.notifier);
 
-    print('CART PRODUCTS : ${cartNotifier.cart}');
-
     return Scaffold(
+      key: scaffoldKey,
       appBar: AppBar(
         title: Text('Menu Products'),
         centerTitle: false,
@@ -108,10 +121,23 @@ class _CatalogProductViewState extends ConsumerState<CatalogProductView> {
                                               ref
                                                   .read(cartProvider.notifier)
                                                   .selectInternet(
-                                                      internetList[index].id!);
+                                                    internetId:
+                                                        internetList[index].id!,
+                                                    price: internetList[index]
+                                                        .price!,
+                                                  );
 
                                               _openCartDialog(cartNotifier);
                                             },
+                                            style: FilledButton.styleFrom(
+                                                backgroundColor:
+                                                    cartNotifier.currentItems(
+                                                                internetList[
+                                                                        index]
+                                                                    .id!) ==
+                                                            null
+                                                        ? Colors.blueGrey[600]
+                                                        : Colors.orange),
                                             child: Text('BUY'),
                                           ),
                                         ],
@@ -170,7 +196,7 @@ class _CatalogProductViewState extends ConsumerState<CatalogProductView> {
                                                   children: [
                                                     IconButton(
                                                       onPressed: cartNotifier
-                                                                  .getQtyAddons(
+                                                                  .getQtyProduct(
                                                                       addonsList[
                                                                               index]
                                                                           .id!) !=
@@ -192,7 +218,7 @@ class _CatalogProductViewState extends ConsumerState<CatalogProductView> {
                                                     ),
                                                     Text(
                                                       cartNotifier
-                                                          .getQtyAddons(
+                                                          .getQtyProduct(
                                                               addonsList[index]
                                                                   .id!)
                                                           .toString(),
@@ -203,9 +229,17 @@ class _CatalogProductViewState extends ConsumerState<CatalogProductView> {
                                                             .read(cartProvider
                                                                 .notifier)
                                                             .addAddons(
-                                                                addonsList[
-                                                                        index]
-                                                                    .id!);
+                                                              addonsId:
+                                                                  addonsList[
+                                                                          index]
+                                                                      .id!,
+                                                              price: addonsList[
+                                                                      index]
+                                                                  .price!,
+                                                            );
+
+                                                        _openCartDialog(
+                                                            cartNotifier);
                                                       },
                                                       icon: Icon(Icons.add),
                                                     ),

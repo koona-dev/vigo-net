@@ -24,7 +24,7 @@ class CatalogRepository {
 
     final internetFromDB = await firestore.collection('internet').get();
     final dataMap = internetFromDB.docs.map((item) {
-      return Internet.fromMap(item.data());
+      return Internet.fromMap(id: item.id, data: item.data());
     }).toList();
     internetData = List.from(dataMap);
 
@@ -36,7 +36,7 @@ class CatalogRepository {
 
     final internetFromDB = await firestore.collection('addons').get();
     final dataMap = internetFromDB.docs.map((item) {
-      return Addons.fromMap(item.data());
+      return Addons.fromMap(id: item.id, data: item.data());
     }).toList();
     addonsData = List.from(dataMap);
 

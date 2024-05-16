@@ -59,7 +59,7 @@ class _CatalogProductViewState extends ConsumerState<CatalogProductView> {
 
   @override
   Widget build(BuildContext context) {
-    final cartNotifier = ref.watch(cartProvider.notifier);
+    final cartNotifier = ref.watch(cartProvider);
 
     return Scaffold(
       key: scaffoldKey,

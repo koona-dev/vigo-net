@@ -81,7 +81,7 @@ class CartNotifier extends ChangeNotifier {
         _cartItems.any((element) => element.productId == addonsId)) {
       final cart =
           _cartItems.firstWhere((element) => element.productId == addonsId);
-      cart.incrementQuantity();
+      cart.qty++;
     } else {
       _cartItems.add(newAddons);
     }
@@ -94,7 +94,7 @@ class CartNotifier extends ChangeNotifier {
     for (var cart in _cartItems) {
       if (addonsId == cart.productId) {
         if (cart.qty > 0) {
-          cart.decrementQuantity();
+          cart.qty--;
         } else {
           _cartItems.remove(cart);
         }

@@ -14,17 +14,6 @@ class Cart extends Equatable {
     this.productType,
   });
 
-  void incrementQuantity() {
-    qty++;
-  }
-
-  // Method untuk mengurangi jumlah item
-  void decrementQuantity() {
-    if (qty > 0) {
-      qty--;
-    }
-  }
-
   @override
   List<Object?> get props => [
         productId,

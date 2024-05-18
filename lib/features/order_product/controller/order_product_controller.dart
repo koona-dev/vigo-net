@@ -1,8 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:isp_app/features/auth/controller/auth_controller.dart';
+import 'package:isp_app/features/order_product/repository/order_product_repository.dart';
 import 'package:isp_app/model/order.dart';
 
 enum ProductType { internet, addons }
+
+// Finally, we are using ChangeNotifierProvider to allow the UI to interact with
+// our CartNotifier class.
+final cartProvider = ChangeNotifierProvider<CartNotifier>((ref) {
+  return CartNotifier();
+});
+
+final orderControllerProvider = Provider((ref) {
+  final orderRepository = ref.watch(orderProductRepoProvider);
+  return OrderProductController(
+    orderProductRepository: orderRepository,
+    ref: ref,
+  );
+});
 
 class CartNotifier extends ChangeNotifier {
   final List<Cart> _cartItems = [];
@@ -105,8 +121,34 @@ class CartNotifier extends ChangeNotifier {
   }
 }
 
-// Finally, we are using ChangeNotifierProvider to allow the UI to interact with
-// our CartNotifier class.
-final cartProvider = ChangeNotifierProvider<CartNotifier>((ref) {
-  return CartNotifier();
-});
+class OrderProductController {
+  final OrderProductRepository orderProductRepository;
+  final ProviderRef ref;
+  OrderProductController({
+    required this.orderProductRepository,
+    required this.ref,
+  });
+
+  void createOrder() {
+    final currentUser = ref.watch(userDataAuthProvider).value;
+    final cartData = ref.watch(cartProvider);
+
+    orderProductRepository.insertOrderProduct(
+      cartItems: cartData.cartItems,
+      userId: currentUser!.id!,
+      tanggalOrder: DateTime.now(),
+      jenisPelayanan: 'Pemesanan Paket',
+      status: 'on-progress',
+    );
+  }
+
+  Future<CheckoutNote> showNote() {
+    final currentUser = ref.watch(userDataAuthProvider).value;
+    final cartData = ref.watch(cartProvider);
+
+    return orderProductRepository.getOrderData(
+      user: currentUser!,
+      cartNotifier: cartData,
+    );
+  }
+}

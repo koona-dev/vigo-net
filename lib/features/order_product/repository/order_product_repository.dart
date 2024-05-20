@@ -18,7 +18,7 @@ class OrderProductRepository {
     required DateTime tanggalOrder,
     required String jenisPelayanan,
     required String status,
-  }) async {
+  }) {
     try {
       Orders orders = Orders(
         userId: userId,
@@ -28,7 +28,7 @@ class OrderProductRepository {
         status: status,
       );
 
-      await firestore.collection('orders').add(orders.toMap());
+      firestore.collection('orders').doc().set(orders.toMap());
     } catch (e) {
       print(e.toString());
     }

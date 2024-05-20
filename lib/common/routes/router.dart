@@ -7,6 +7,7 @@ import 'package:isp_app/features/auth/views/reset_password_view.dart';
 import 'package:isp_app/features/auth/views/signin_phone_number_view.dart';
 import 'package:isp_app/features/catalog_product/views/catalog_product_view.dart';
 import 'package:isp_app/features/dashboard/views/dashboard_view.dart';
+import 'package:isp_app/features/order_product/views/order_product_view.dart';
 import 'package:isp_app/features/profile/views/user_information_view.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -47,6 +48,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case CatalogProductView.routeName:
       return MaterialPageRoute(
         builder: (context) => const CatalogProductView(),
+      );
+    case OrderProductView.routeName:
+      return MaterialPageRoute(
+        builder: (context) => OrderProductView(),
       );
     default:
       return MaterialPageRoute(

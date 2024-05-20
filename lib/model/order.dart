@@ -3,21 +3,45 @@ import 'package:equatable/equatable.dart';
 import 'package:isp_app/features/order_product/controller/order_product_controller.dart';
 
 class Cart extends Equatable {
-  final String? productId;
+  final String productId;
+  final String productName;
   int qty;
   final int price;
-  final ProductType? productType;
+  final ProductType productType;
 
   Cart({
-    this.productId,
+    required this.productId,
+    required this.productName,
     this.qty = 0,
     this.price = 0,
-    this.productType,
+    required this.productType,
   });
+
+  factory Cart.fromMap(Map<String, dynamic> data) {
+    return Cart(
+      productId: data['productId'] ?? '',
+      productName: data['productName'] ?? '',
+      qty: data['qty'] ?? 0,
+      price: data['price'] ?? 0,
+      productType: ProductType.values
+          .firstWhere((element) => element.name == data['productType']),
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'productId': productId,
+      'productName': productName,
+      'qty': qty,
+      'price': price,
+      'productType': productType.name,
+    };
+  }
 
   @override
   List<Object?> get props => [
         productId,
+        productName,
         qty,
         price,
       ];
@@ -47,17 +71,19 @@ class Orders extends Equatable {
     return Orders(
       id: id,
       userId: data['userId'] ?? '',
-      cartItems: data['cartItems'] ?? [],
-      tanggalOrder: data['tanggalOrder'] ?? DateTime.now(),
+      cartItems:
+          data['cartItems'].map<Cart>((cart) => Cart.fromMap(cart)).toList(),
+      tanggalOrder: (data['tanggalOrder'] as Timestamp).toDate(),
       jenisPelayanan: data['jenisPelayanan'] ?? '',
       status: data['status'] ?? '',
     );
   }
 
   Map<String, dynamic> toMap() {
+    final cartItemsMap = cartItems.map((cart) => cart.toMap()).toList();
     return {
       'userId': userId,
-      'cartItems': FieldValue.arrayUnion(cartItems),
+      'cartItems': FieldValue.arrayUnion(cartItemsMap),
       'tanggalOrder': Timestamp.fromDate(tanggalOrder),
       'jenisPelayanan': jenisPelayanan,
       'status': status,

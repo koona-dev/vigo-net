@@ -20,13 +20,16 @@ final orderControllerProvider = Provider((ref) {
   );
 });
 
+final orderDataProvider = FutureProvider((ref) {
+  final orderController = ref.watch(orderControllerProvider);
+  return orderController.showNote();
+});
+
 class CartNotifier extends ChangeNotifier {
   final List<Cart> _cartItems = [];
   List<Cart> get cartItems => _cartItems;
 
   int getQtyProduct(String productId) {
-    notifyListeners();
-
     if (_cartItems.isNotEmpty &&
         _cartItems.any((element) => element.productId == productId)) {
       final cart =
@@ -59,6 +62,7 @@ class CartNotifier extends ChangeNotifier {
   // Let's allow the UI to add _cartItems.
   void selectInternet({
     required String internetId,
+    required String internetName,
     required int price,
   }) {
     final cartIdx =
@@ -71,6 +75,7 @@ class CartNotifier extends ChangeNotifier {
       _cartItems.add(
         Cart(
           productId: internetId,
+          productName: internetName,
           qty: 1,
           price: price,
           productType: ProductType.internet,
@@ -84,10 +89,12 @@ class CartNotifier extends ChangeNotifier {
 
   void addAddons({
     required String addonsId,
+    required String addonsName,
     required int price,
   }) {
     final newAddons = Cart(
       productId: addonsId,
+      productName: addonsName,
       qty: 1,
       price: price,
       productType: ProductType.addons,

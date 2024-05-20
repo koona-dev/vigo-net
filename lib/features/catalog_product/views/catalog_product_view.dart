@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isp_app/common/widgets/error.dart';
 import 'package:isp_app/features/catalog_product/controller/catalog_controller.dart';
 import 'package:isp_app/features/order_product/controller/order_product_controller.dart';
+import 'package:isp_app/features/order_product/views/order_product_view.dart';
 
 class CatalogProductView extends ConsumerStatefulWidget {
   const CatalogProductView({Key? key}) : super(key: key);
@@ -41,8 +42,17 @@ class _CatalogProductViewState extends ConsumerState<CatalogProductView> {
                   ),
                   SizedBox(width: 20),
                   FilledButton(
-                    onPressed: () {},
-                    child: Text('Checkout'),
+                    onPressed: cartNotifier.cartItems.any((element) =>
+                            element.productType == ProductType.internet)
+                        ? () {
+                            ref.read(orderControllerProvider).createOrder();
+                            Navigator.pushNamed(
+                              context,
+                              OrderProductView.routeName,
+                            );
+                          }
+                        : null,
+                    child: Text('Buy'),
                   ),
                 ],
               ),
@@ -123,6 +133,9 @@ class _CatalogProductViewState extends ConsumerState<CatalogProductView> {
                                                   .selectInternet(
                                                     internetId:
                                                         internetList[index].id!,
+                                                    internetName:
+                                                        internetList[index]
+                                                            .title!,
                                                     price: internetList[index]
                                                         .price!,
                                                   );
@@ -181,7 +194,7 @@ class _CatalogProductViewState extends ConsumerState<CatalogProductView> {
                                               CrossAxisAlignment.start,
                                           children: <Widget>[
                                             Text(
-                                              addonsList[index].title!,
+                                              addonsList[index].title!!,
                                               softWrap: true,
                                             ),
                                             Row(
@@ -233,6 +246,10 @@ class _CatalogProductViewState extends ConsumerState<CatalogProductView> {
                                                                   addonsList[
                                                                           index]
                                                                       .id!,
+                                                              addonsName:
+                                                                  addonsList[
+                                                                          index]
+                                                                      .title!,
                                                               price: addonsList[
                                                                       index]
                                                                   .price!,

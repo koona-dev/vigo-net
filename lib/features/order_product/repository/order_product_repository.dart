@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:isp_app/features/order_product/controller/order_product_controller.dart';
 import 'package:isp_app/model/auth_user.dart';
 import 'package:isp_app/model/order.dart';
 
@@ -11,6 +10,14 @@ final orderProductRepoProvider = Provider(
 class OrderProductRepository {
   final FirebaseFirestore firestore;
   OrderProductRepository(this.firestore);
+
+  Future<bool> isOrder(String userId) async {
+    return await firestore.collection('orders').get().then(
+          (collection) => collection.docs.any(
+            (doc) => doc.data()['userId'] == userId,
+          ),
+        );
+  }
 
   void insertOrderProduct({
     required String userId,
@@ -34,29 +41,13 @@ class OrderProductRepository {
     }
   }
 
-  Future<CheckoutNote> getOrderData({
-    required AuthUser user,
-    required CartNotifier cartNotifier,
-  }) async {
-    final doc = await firestore.collection('orders').get().then(
+  Future<Orders> getOrderData(AuthUser user) async {
+    final orderDoc = await firestore.collection('orders').get().then(
           (collection) => collection.docs.firstWhere(
             (doc) => doc.data()['userId'] == user.id,
           ),
         );
 
-    final order = Orders.fromMap(
-      id: doc.id,
-      data: doc.data(),
-    );
-
-    final note = CheckoutNote(
-      nama: user.name!,
-      noHp: user.phone!,
-      alamat: user.address!,
-      products: order.cartItems,
-      totalHarga: cartNotifier.subTotalPrice,
-    );
-
-    return note;
+    return Orders.fromMap(id: orderDoc.id, data: orderDoc.data());
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isp_app/features/auth/controller/auth_controller.dart';
 import 'package:isp_app/features/order_product/repository/order_product_repository.dart';
+import 'package:isp_app/model/auth_user.dart';
 import 'package:isp_app/model/order.dart';
 
 enum ProductType { internet, addons }
@@ -9,7 +10,8 @@ enum ProductType { internet, addons }
 // Finally, we are using ChangeNotifierProvider to allow the UI to interact with
 // our CartNotifier class.
 final cartProvider = ChangeNotifierProvider<CartNotifier>((ref) {
-  return CartNotifier();
+  final currentUser = ref.watch(userDataAuthProvider).value;
+  return CartNotifier(currentUser!);
 });
 
 final orderControllerProvider = Provider((ref) {
@@ -22,10 +24,18 @@ final orderControllerProvider = Provider((ref) {
 
 final orderDataProvider = FutureProvider((ref) {
   final orderController = ref.watch(orderControllerProvider);
-  return orderController.showNote();
+  return orderController.displayDataOrder();
+});
+
+final orderStatusProvider = FutureProvider((ref) {
+  final orderController = ref.watch(orderControllerProvider);
+  return orderController.isOrder;
 });
 
 class CartNotifier extends ChangeNotifier {
+  final AuthUser currentUser;
+  CartNotifier(this.currentUser);
+
   final List<Cart> _cartItems = [];
   List<Cart> get cartItems => _cartItems;
 
@@ -57,6 +67,18 @@ class CartNotifier extends ChangeNotifier {
     } else {
       return null;
     }
+  }
+
+  CheckoutNote get showNote {
+    final note = CheckoutNote(
+      nama: currentUser.name!,
+      noHp: currentUser.phone!,
+      alamat: currentUser.address!,
+      products: cartItems,
+      totalHarga: subTotalPrice,
+    );
+
+    return note;
   }
 
   // Let's allow the UI to add _cartItems.
@@ -136,6 +158,12 @@ class OrderProductController {
     required this.ref,
   });
 
+  Future<bool> get isOrder {
+    final currentUser = ref.watch(userDataAuthProvider).value;
+    final userId = currentUser!.id!;
+    return orderProductRepository.isOrder(userId);
+  }
+
   void createOrder() {
     final currentUser = ref.watch(userDataAuthProvider).value;
     final cartData = ref.watch(cartProvider);
@@ -149,13 +177,8 @@ class OrderProductController {
     );
   }
 
-  Future<CheckoutNote> showNote() {
+  Future<Orders> displayDataOrder() {
     final currentUser = ref.watch(userDataAuthProvider).value;
-    final cartData = ref.watch(cartProvider);
-
-    return orderProductRepository.getOrderData(
-      user: currentUser!,
-      cartNotifier: cartData,
-    );
+    return orderProductRepository.getOrderData(currentUser!);
   }
 }

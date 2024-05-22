@@ -180,4 +180,6 @@ class AuthRepository {
       throw UserNotLoginException();
     }
   }
+
+  Future<void> deleteUser() async {}
 }

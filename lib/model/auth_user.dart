@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
+enum UserRole { user, cp, customer }
+
 class AuthUser extends Equatable {
   final String? id;
   final String? username;
@@ -11,6 +13,8 @@ class AuthUser extends Equatable {
   final String? address;
   final String? noKtp;
   final List<dynamic> housePhotoUrl;
+  final UserRole role;
+  final String? noInternet;
 
   const AuthUser({
     this.id,
@@ -22,6 +26,8 @@ class AuthUser extends Equatable {
     this.address,
     this.noKtp,
     this.housePhotoUrl = const [],
+    this.role = UserRole.user,
+    this.noInternet,
   });
 
   factory AuthUser.fromMap({
@@ -38,6 +44,9 @@ class AuthUser extends Equatable {
       address: data['address'] ?? '',
       noKtp: data['noKtp'] ?? '',
       housePhotoUrl: data['housePhotoUrl'] ?? <String>[],
+      role:
+          UserRole.values.firstWhere((element) => element.name == data['role']),
+      noInternet: data['noInternet'] ?? '',
     );
   }
 
@@ -51,6 +60,8 @@ class AuthUser extends Equatable {
       'address': address,
       'noKtp': noKtp,
       'housePhotoUrl': FieldValue.arrayUnion(housePhotoUrl),
+      'role': role.name,
+      'noInternet': noInternet,
     };
   }
 
@@ -62,5 +73,7 @@ class AuthUser extends Equatable {
         email,
         phone,
         name,
+        role,
+        noInternet,
       ];
 }

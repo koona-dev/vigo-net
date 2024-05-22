@@ -45,7 +45,6 @@ class _CatalogProductViewState extends ConsumerState<CatalogProductView> {
                     onPressed: cartNotifier.cartItems.any((element) =>
                             element.productType == ProductType.internet)
                         ? () {
-                            ref.read(orderControllerProvider).createOrder();
                             Navigator.pushNamed(
                               context,
                               OrderProductView.routeName,

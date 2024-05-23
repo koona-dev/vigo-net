@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:isp_app/features/order_product/controller/order_product_controller.dart';
 
+enum JenisPemesanan { pasangBaru, tambahAddons, upgradePaket }
+
 class Cart extends Equatable {
   final String productId;
   final String productName;
@@ -52,7 +54,7 @@ class Orders extends Equatable {
   final String userId;
   final List<Cart> cartItems;
   final DateTime tanggalOrder;
-  final String jenisPelayanan;
+  final JenisPemesanan jenisPemesanan;
   final String status;
 
   const Orders({
@@ -60,7 +62,7 @@ class Orders extends Equatable {
     required this.userId,
     required this.cartItems,
     required this.tanggalOrder,
-    required this.jenisPelayanan,
+    this.jenisPemesanan = JenisPemesanan.pasangBaru,
     required this.status,
   });
 
@@ -74,7 +76,8 @@ class Orders extends Equatable {
       cartItems:
           data['cartItems'].map<Cart>((cart) => Cart.fromMap(cart)).toList(),
       tanggalOrder: (data['tanggalOrder'] as Timestamp).toDate(),
-      jenisPelayanan: data['jenisPelayanan'] ?? '',
+      jenisPemesanan: JenisPemesanan.values
+          .firstWhere((element) => element.name == data['jenisPemesanan']),
       status: data['status'] ?? '',
     );
   }
@@ -85,7 +88,7 @@ class Orders extends Equatable {
       'userId': userId,
       'cartItems': FieldValue.arrayUnion(cartItemsMap),
       'tanggalOrder': Timestamp.fromDate(tanggalOrder),
-      'jenisPelayanan': jenisPelayanan,
+      'jenisPemesanan': jenisPemesanan.name,
       'status': status,
     };
   }
@@ -96,7 +99,7 @@ class Orders extends Equatable {
         userId,
         cartItems,
         tanggalOrder,
-        jenisPelayanan,
+        jenisPemesanan,
         status,
       ];
 }

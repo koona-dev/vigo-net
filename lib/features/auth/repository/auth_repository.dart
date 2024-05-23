@@ -161,6 +161,11 @@ class AuthRepository {
         );
   }
 
+  void updateUserProfile(Map<String, dynamic> dataUser) async {
+    final uid = auth.currentUser?.uid;
+    await firestore.collection('users').doc(uid).update(dataUser);
+  }
+
   Future<void> sendPasswordReset(String password) async {
     try {
       final uid = auth.currentUser?.uid;

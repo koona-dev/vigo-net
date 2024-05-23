@@ -89,6 +89,10 @@ class AuthController {
     );
   }
 
+  void editProfile(Map<String, dynamic> data) {
+    authRepository.updateUserProfile(data);
+  }
+
   void signOut() {
     authRepository.signOut();
   }

@@ -7,8 +7,6 @@ import 'package:isp_app/model/order.dart';
 
 enum ProductType { internet, addons }
 
-// Finally, we are using ChangeNotifierProvider to allow the UI to interact with
-// our CartNotifier class.
 final cartProvider = ChangeNotifierProvider<CartNotifier>((ref) {
   final currentUser = ref.watch(userDataAuthProvider).value;
   return CartNotifier(currentUser!);
@@ -22,7 +20,7 @@ final orderControllerProvider = Provider((ref) {
   );
 });
 
-final orderDataProvider = FutureProvider((ref) {
+final orderDataProvider = StreamProvider((ref) {
   final orderController = ref.watch(orderControllerProvider);
   return orderController.displayDataOrder();
 });
@@ -161,7 +159,7 @@ class OrderProductController {
   Future<bool> get isOrder {
     final currentUser = ref.watch(userDataAuthProvider).value;
     final userId = currentUser!.id!;
-    return orderProductRepository.isOrder(userId);
+    return orderProductRepository.isOrderPasangBaru(userId);
   }
 
   void createOrder() {
@@ -172,13 +170,18 @@ class OrderProductController {
       cartItems: cartData.cartItems,
       userId: currentUser!.id!,
       tanggalOrder: DateTime.now(),
-      jenisPelayanan: 'Pemesanan Paket',
       status: 'on-progress',
     );
+
+    ref.watch(authControllerProvider).editProfile({'role': 'cp'});
   }
 
-  Future<Orders> displayDataOrder() {
+  Stream<List<Orders?>> displayDataOrder() {
     final currentUser = ref.watch(userDataAuthProvider).value;
-    return orderProductRepository.getOrderData(currentUser!);
+    return orderProductRepository.getOrdersByUser(currentUser!.id!);
+  }
+
+  void cancelOrder(String orderId) {
+    orderProductRepository.deleteOrder(orderId);
   }
 }

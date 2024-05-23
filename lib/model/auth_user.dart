@@ -14,7 +14,6 @@ class AuthUser extends Equatable {
   final String? noKtp;
   final List<dynamic> housePhotoUrl;
   final UserRole role;
-  final String? noInternet;
 
   const AuthUser({
     this.id,
@@ -27,7 +26,6 @@ class AuthUser extends Equatable {
     this.noKtp,
     this.housePhotoUrl = const [],
     this.role = UserRole.user,
-    this.noInternet,
   });
 
   factory AuthUser.fromMap({
@@ -46,7 +44,6 @@ class AuthUser extends Equatable {
       housePhotoUrl: data['housePhotoUrl'] ?? <String>[],
       role:
           UserRole.values.firstWhere((element) => element.name == data['role']),
-      noInternet: data['noInternet'] ?? '',
     );
   }
 
@@ -61,7 +58,6 @@ class AuthUser extends Equatable {
       'noKtp': noKtp,
       'housePhotoUrl': FieldValue.arrayUnion(housePhotoUrl),
       'role': role.name,
-      'noInternet': noInternet,
     };
   }
 
@@ -74,6 +70,5 @@ class AuthUser extends Equatable {
         phone,
         name,
         role,
-        noInternet,
       ];
 }

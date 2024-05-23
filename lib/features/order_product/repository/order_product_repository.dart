@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:isp_app/model/auth_user.dart';
 import 'package:isp_app/model/order.dart';
 
 final orderProductRepoProvider = Provider(
@@ -11,10 +10,12 @@ class OrderProductRepository {
   final FirebaseFirestore firestore;
   OrderProductRepository(this.firestore);
 
-  Future<bool> isOrder(String userId) async {
+  Future<bool> isOrderPasangBaru(String userId) async {
     return await firestore.collection('orders').get().then(
           (collection) => collection.docs.any(
-            (doc) => doc.data()['userId'] == userId,
+            (doc) =>
+                doc.data()['userId'] == userId &&
+                doc.data()['jenisPemesanan'] == JenisPemesanan.pasangBaru.name,
           ),
         );
   }
@@ -23,7 +24,6 @@ class OrderProductRepository {
     required String userId,
     required List<Cart> cartItems,
     required DateTime tanggalOrder,
-    required String jenisPelayanan,
     required String status,
   }) {
     try {
@@ -31,7 +31,6 @@ class OrderProductRepository {
         userId: userId,
         cartItems: cartItems,
         tanggalOrder: tanggalOrder,
-        jenisPelayanan: jenisPelayanan,
         status: status,
       );
 
@@ -41,13 +40,21 @@ class OrderProductRepository {
     }
   }
 
-  Future<Orders> getOrderData(AuthUser user) async {
-    final orderDoc = await firestore.collection('orders').get().then(
-          (collection) => collection.docs.firstWhere(
-            (doc) => doc.data()['userId'] == user.id,
-          ),
+  Stream<List<Orders?>> getOrdersByUser(String userId) {
+    final orderList = firestore.collection('orders').snapshots().map(
+          (collection) => collection.docs.map(
+            (doc) {
+              if (doc.data()['userId'] == userId) {
+                return Orders.fromMap(id: doc.id, data: doc.data());
+              }
+            },
+          ).toList(),
         );
 
-    return Orders.fromMap(id: orderDoc.id, data: orderDoc.data());
+    return orderList;
+  }
+
+  void deleteOrder(String orderId) {
+    firestore.collection('orders').doc(orderId).delete();
   }
 }

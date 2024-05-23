@@ -43,13 +43,6 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
     final orderStatus = ref.watch(orderStatusProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        leading: CircleAvatar(
-          backgroundImage: AssetImage('assets/person.jpg'),
-        ),
-        title: Text('Stefan Steakin'),
-        centerTitle: false,
-      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(

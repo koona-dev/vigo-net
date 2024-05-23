@@ -25,9 +25,9 @@ final orderDataProvider = StreamProvider((ref) {
   return orderController.displayDataOrder();
 });
 
-final orderStatusProvider = FutureProvider((ref) {
+final currentOrderProvider = FutureProvider((ref) {
   final orderController = ref.watch(orderControllerProvider);
-  return orderController.isOrder;
+  return orderController.currentOrder;
 });
 
 class CartNotifier extends ChangeNotifier {
@@ -156,10 +156,10 @@ class OrderProductController {
     required this.ref,
   });
 
-  Future<bool> get isOrder {
+  Future<Orders?> get currentOrder {
     final currentUser = ref.watch(userDataAuthProvider).value;
     final userId = currentUser!.id!;
-    return orderProductRepository.isOrderPasangBaru(userId);
+    return orderProductRepository.currentOrder(userId);
   }
 
   void createOrder() {

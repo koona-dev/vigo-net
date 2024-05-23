@@ -4,6 +4,7 @@ import 'package:isp_app/common/widgets/error.dart';
 import 'package:isp_app/features/auth/controller/auth_controller.dart';
 import 'package:isp_app/features/catalog_product/views/catalog_product_view.dart';
 import 'package:isp_app/features/order_product/controller/order_product_controller.dart';
+import 'package:isp_app/features/order_product/views/order_details_view.dart';
 import 'package:isp_app/features/profile/views/user_information_view.dart';
 
 class DashboardView extends ConsumerStatefulWidget {
@@ -16,7 +17,7 @@ class DashboardView extends ConsumerStatefulWidget {
 }
 
 class _DashboardViewState extends ConsumerState<DashboardView> {
-  Widget _showActivity() {
+  Widget _showActivity(order) {
     return ListTile(
       tileColor: Colors.indigo.shade700,
       title: Text(
@@ -32,7 +33,11 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
         color: Colors.white,
       ),
       onTap: () {
-        // Navigator.pushNamed(context, UserInformationView.routeName);
+        Navigator.pushNamed(
+          context,
+          OrderDetailsView.routeName,
+          arguments: order,
+        );
       },
     );
   }
@@ -40,16 +45,16 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userDataAuthProvider).value!;
-    final orderStatus = ref.watch(orderStatusProvider);
+    final currentOrder = ref.watch(currentOrderProvider);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          orderStatus.when(
-            data: (isOrder) => isOrder
-                ? _showActivity()
+          currentOrder.when(
+            data: (data) => data != null
+                ? _showActivity(data)
                 : Card(
                     margin: EdgeInsets.all(24),
                     child: Padding(

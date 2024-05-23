@@ -10,14 +10,21 @@ class OrderProductRepository {
   final FirebaseFirestore firestore;
   OrderProductRepository(this.firestore);
 
-  Future<bool> isOrderPasangBaru(String userId) async {
-    return await firestore.collection('orders').get().then(
-          (collection) => collection.docs.any(
-            (doc) =>
-                doc.data()['userId'] == userId &&
-                doc.data()['jenisPemesanan'] == JenisPemesanan.pasangBaru.name,
-          ),
-        );
+  Future<Orders?> currentOrder(String userId) async {
+    final collection = await firestore
+        .collection('orders')
+        .orderBy('tanggalOrder', descending: true)
+        .get();
+    final docList = collection.docs;
+    final doc = docList.firstWhere(
+      (element) {
+        final data = element.data();
+        return data['userId'] == userId &&
+            data['jenisPemesanan'] == JenisPemesanan.pasangBaru.name;
+      },
+    );
+    final order = Orders.fromMap(id: doc.id, data: doc.data());
+    return order;
   }
 
   void insertOrderProduct({

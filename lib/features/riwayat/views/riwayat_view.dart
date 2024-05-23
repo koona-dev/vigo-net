@@ -3,13 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:isp_app/common/widgets/error.dart';
 import 'package:isp_app/features/order_product/controller/order_product_controller.dart';
+import 'package:isp_app/features/order_product/views/order_details_view.dart';
 import 'package:isp_app/model/order.dart';
 
 class RiwayatView extends ConsumerStatefulWidget {
-  const RiwayatView({Key? key}) : super(key: key);
-
-  static const routeName = '/dashboard';
-
   @override
   ConsumerState<RiwayatView> createState() => _RiwayatViewState();
 }
@@ -80,29 +77,36 @@ class _RiwayatViewState extends ConsumerState<RiwayatView> {
                         final orderDate =
                             DateFormat.yMMMd().format(order.tanggalOrder);
 
-                        return Card(
-                          margin: EdgeInsets.symmetric(vertical: 8),
-                          child: Padding(
-                            padding: EdgeInsets.all(16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                _generatedStatusWidget(order),
-                                SizedBox(height: 12),
-                                Text(item.productName),
-                                SizedBox(height: 8),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(order.id!),
-                                    SizedBox(width: 20),
-                                    Text(orderDate.toString()),
-                                  ],
-                                ),
-                                SizedBox(height: 8),
-                                Text(order.totalHarga.toString()),
-                              ],
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              OrderDetailsView.routeName,
+                              arguments: order,
+                            );
+                          },
+                          child: Card(
+                            margin: EdgeInsets.symmetric(vertical: 8),
+                            child: Padding(
+                              padding: EdgeInsets.all(16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _generatedStatusWidget(order),
+                                  SizedBox(height: 12),
+                                  Text(item.productName),
+                                  SizedBox(height: 8),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(orderDate.toString()),
+                                      SizedBox(width: 20),
+                                      Text(order.totalHarga.toString()),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         );

@@ -122,6 +122,7 @@ class _MyAppState extends ConsumerState<MyApp> {
                       label: 'Profile',
                     ),
                   ],
+                  currentIndex: currentViewIdx,
                   onTap: (index) {
                     setState(() {
                       currentViewIdx = index;

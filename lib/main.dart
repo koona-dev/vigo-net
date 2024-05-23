@@ -34,59 +34,55 @@ class MyApp extends ConsumerStatefulWidget {
 class _MyAppState extends ConsumerState<MyApp> {
   int currentViewIdx = 0;
 
-  AppBar _generateAppBar() {
-    switch (currentViewIdx) {
-      case 0:
-        return AppBar(
-          leading: CircleAvatar(
-            backgroundImage: AssetImage('assets/person.jpg'),
-          ),
-          title: Text('Stefan Steakin'),
-          centerTitle: false,
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.notifications),
-            ),
-          ],
-        );
+  List<AppBar> _appBarList = [
+    AppBar(
+      leading: CircleAvatar(
+        backgroundImage: AssetImage('assets/person.jpg'),
+      ),
+      title: Text('Stefan Steakin'),
+      centerTitle: false,
+      actions: [
+        IconButton(
+          onPressed: () {},
+          icon: Icon(Icons.notifications),
+        ),
+      ],
+    ),
+    AppBar(
+      title: Text('Riwayat'),
+      centerTitle: false,
+    ),
+    AppBar(
+      title: Text('Bantuan Pelayanan'),
+      centerTitle: false,
+    ),
+    AppBar(
+      leading: CircleAvatar(
+        backgroundImage: AssetImage('assets/person.jpg'),
+      ),
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Stefan Steakin'),
+          Text('PR21040179901'),
+        ],
+      ),
+      centerTitle: false,
+      actions: [
+        IconButton(
+          onPressed: () {},
+          icon: Icon(Icons.edit),
+        ),
+      ],
+    ),
+  ];
 
-      case 1:
-        return AppBar(
-          title: Text('Riwayat'),
-          centerTitle: false,
-        );
-
-      case 2:
-        return AppBar(
-          title: Text('Bantuan Pelayanan'),
-          centerTitle: false,
-        );
-
-      case 3:
-        return AppBar(
-          leading: CircleAvatar(
-            backgroundImage: AssetImage('assets/person.jpg'),
-          ),
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Stefan Steakin'),
-              Text('PR21040179901'),
-            ],
-          ),
-          centerTitle: false,
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.edit),
-            ),
-          ],
-        );
-      default:
-        return AppBar();
-    }
-  }
+  List<Widget> _contentList = [
+    DashboardView(),
+    RiwayatView(),
+    BantuanView(),
+    ProfileView(),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +100,7 @@ class _MyAppState extends ConsumerState<MyApp> {
                 return const LoginView();
               }
               return Scaffold(
-                appBar: _generateAppBar(),
+                appBar: _appBarList.elementAt(currentViewIdx),
                 bottomNavigationBar: BottomNavigationBar(
                   items: [
                     BottomNavigationBarItem(
@@ -128,25 +124,9 @@ class _MyAppState extends ConsumerState<MyApp> {
                     setState(() {
                       currentViewIdx = index;
                     });
-
-                    switch (index) {
-                      case 0:
-                        DashboardView();
-                        break;
-                      case 1:
-                        RiwayatView();
-                        break;
-                      case 2:
-                        BantuanView();
-                        break;
-                      case 3:
-                        ProfileView();
-                        break;
-                      default:
-                    }
                   },
                 ),
-                body: const DashboardView(),
+                body: _contentList.elementAt(currentViewIdx),
               );
             },
             error: (err, trace) {

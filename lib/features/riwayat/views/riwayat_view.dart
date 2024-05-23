@@ -14,5 +14,31 @@ class _RiwayatViewState extends ConsumerState<RiwayatView> {
   @override
   Widget build(BuildContext context) {
     return Container();
+    // DefaultTabController(
+    //   length: 3,
+    //   child: Column(
+    //     children: [
+    //       TabBar(
+    //         tabs: [
+    //           Tab(text: 'Tagihan'),
+    //           Tab(text: 'Permintaan'),
+    //           Tab(text: 'Pemesanan'),
+    //         ],
+    //       ),
+    //       Expanded(
+    //         child: TabBarView(
+    //           children: [
+    //             Center(
+    //               child: Text('Ini listview Tagihan'),
+    //             ),
+    //             Center(
+    //               child: Text('Ini listview Permintaan'),
+    //             ),
+    //           ],
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
   }
 }

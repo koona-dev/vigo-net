@@ -42,60 +42,57 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
     final user = ref.watch(userDataAuthProvider).value!;
     final orderStatus = ref.watch(orderStatusProvider);
 
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            orderStatus.when(
-              data: (isOrder) => isOrder
-                  ? _showActivity()
-                  : Card(
-                      margin: EdgeInsets.all(24),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          children: <Widget>[
-                            Text(
-                                'Koneksikan Duniamu dengan Kecepatan Tanpa Batas!'),
-                            Text(
-                                'Kini internet cepat bisa dibeli mulai harga Rp. 199.000/bulan'),
-                            ElevatedButton(
-                              onPressed: () {
-                                if (user.address == null) {
-                                  Navigator.pushNamed(
-                                      context, UserInformationView.routeName);
-                                } else {
-                                  Navigator.pushNamed(
-                                      context, CatalogProductView.routeName);
-                                }
-                              },
-                              child: Text('Pilih Paket Internet'),
-                            ),
-                          ],
-                        ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          orderStatus.when(
+            data: (isOrder) => isOrder
+                ? _showActivity()
+                : Card(
+                    margin: EdgeInsets.all(24),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        children: <Widget>[
+                          Text(
+                              'Koneksikan Duniamu dengan Kecepatan Tanpa Batas!'),
+                          Text(
+                              'Kini internet cepat bisa dibeli mulai harga Rp. 199.000/bulan'),
+                          ElevatedButton(
+                            onPressed: () {
+                              if (user.address == null) {
+                                Navigator.pushNamed(
+                                    context, UserInformationView.routeName);
+                              } else {
+                                Navigator.pushNamed(
+                                    context, CatalogProductView.routeName);
+                              }
+                            },
+                            child: Text('Pilih Paket Internet'),
+                          ),
+                        ],
                       ),
                     ),
-              error: (error, stackTrace) {
-                return ErrorView(error: error.toString());
-              },
-              loading: () => CircularProgressIndicator(),
-            ),
-            SizedBox(height: 24),
-            user.address == null
-                ? ListTile(
-                    title: Text('Silahkan Lengkapi Data Diri Anda'),
-                    subtitle: Text('Kelengkapan profil Anda 60%'),
-                    trailing: Icon(Icons.navigate_next_sharp),
-                    onTap: () {
-                      Navigator.pushNamed(
-                          context, UserInformationView.routeName);
-                    },
-                  )
-                : SizedBox.shrink(),
-          ],
-        ),
+                  ),
+            error: (error, stackTrace) {
+              return ErrorView(error: error.toString());
+            },
+            loading: () => CircularProgressIndicator(),
+          ),
+          SizedBox(height: 24),
+          user.address == null
+              ? ListTile(
+                  title: Text('Silahkan Lengkapi Data Diri Anda'),
+                  subtitle: Text('Kelengkapan profil Anda 60%'),
+                  trailing: Icon(Icons.navigate_next_sharp),
+                  onTap: () {
+                    Navigator.pushNamed(context, UserInformationView.routeName);
+                  },
+                )
+              : SizedBox.shrink(),
+        ],
       ),
     );
   }

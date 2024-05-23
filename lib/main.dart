@@ -102,6 +102,8 @@ class _MyAppState extends ConsumerState<MyApp> {
               return Scaffold(
                 appBar: _appBarList.elementAt(currentViewIdx),
                 bottomNavigationBar: BottomNavigationBar(
+                  selectedItemColor: Colors.deepOrange,
+                  unselectedItemColor: Colors.black45,
                   items: [
                     BottomNavigationBarItem(
                       icon: Icon(Icons.home),

@@ -4,6 +4,8 @@ import 'package:isp_app/features/order_product/controller/order_product_controll
 
 enum JenisPemesanan { pasangBaru, tambahAddons, upgradePaket }
 
+enum OrderStatus { menunggu, berhasil, dibatalkan }
+
 class Cart extends Equatable {
   final String productId;
   final String productName;
@@ -55,7 +57,8 @@ class Orders extends Equatable {
   final List<Cart> cartItems;
   final DateTime tanggalOrder;
   final JenisPemesanan jenisPemesanan;
-  final String status;
+  final OrderStatus status;
+  final int totalHarga;
 
   const Orders({
     this.id,
@@ -63,7 +66,8 @@ class Orders extends Equatable {
     required this.cartItems,
     required this.tanggalOrder,
     this.jenisPemesanan = JenisPemesanan.pasangBaru,
-    required this.status,
+    this.status = OrderStatus.menunggu,
+    required this.totalHarga,
   });
 
   factory Orders.fromMap({
@@ -78,7 +82,9 @@ class Orders extends Equatable {
       tanggalOrder: (data['tanggalOrder'] as Timestamp).toDate(),
       jenisPemesanan: JenisPemesanan.values
           .firstWhere((element) => element.name == data['jenisPemesanan']),
-      status: data['status'] ?? '',
+      status: OrderStatus.values
+          .firstWhere((element) => element.name == data['status']),
+      totalHarga: data['totalHarga'] ?? 0,
     );
   }
 
@@ -89,7 +95,8 @@ class Orders extends Equatable {
       'cartItems': FieldValue.arrayUnion(cartItemsMap),
       'tanggalOrder': Timestamp.fromDate(tanggalOrder),
       'jenisPemesanan': jenisPemesanan.name,
-      'status': status,
+      'status': status.name,
+      'totalHarga': totalHarga,
     };
   }
 
@@ -99,8 +106,9 @@ class Orders extends Equatable {
         userId,
         cartItems,
         tanggalOrder,
-        jenisPemesanan,
-        status,
+        jenisPemesanan.name,
+        status.name,
+        totalHarga,
       ];
 }
 

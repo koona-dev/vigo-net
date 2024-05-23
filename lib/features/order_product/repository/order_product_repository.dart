@@ -24,14 +24,14 @@ class OrderProductRepository {
     required String userId,
     required List<Cart> cartItems,
     required DateTime tanggalOrder,
-    required String status,
+    required int totalHarga,
   }) {
     try {
       Orders orders = Orders(
         userId: userId,
         cartItems: cartItems,
         tanggalOrder: tanggalOrder,
-        status: status,
+        totalHarga: totalHarga,
       );
 
       firestore.collection('orders').doc().set(orders.toMap());

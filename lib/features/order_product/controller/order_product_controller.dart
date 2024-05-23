@@ -170,7 +170,7 @@ class OrderProductController {
       cartItems: cartData.cartItems,
       userId: currentUser!.id!,
       tanggalOrder: DateTime.now(),
-      status: 'on-progress',
+      totalHarga: cartData.subTotalPrice,
     );
 
     ref.watch(authControllerProvider).editProfile({'role': 'cp'});

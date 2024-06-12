@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:isp_app/backend/user/user_controller.dart';
 import 'package:isp_app/common/routes/router.dart';
 import 'package:isp_app/common/widgets/error.dart';
-import 'package:isp_app/features/auth/controller/auth_controller.dart';
-import 'package:isp_app/features/auth/views/login_view.dart';
-import 'package:isp_app/features/bantuan/views/bantuan_view.dart';
-import 'package:isp_app/features/dashboard/views/dashboard_view.dart';
-import 'package:isp_app/features/profile/views/profile_view.dart';
-import 'package:isp_app/features/riwayat/views/riwayat_view.dart';
 import 'firebase_options.dart';
+import 'ui/views.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -79,8 +75,8 @@ class _MyAppState extends ConsumerState<MyApp> {
 
   List<Widget> _contentList = [
     DashboardView(),
-    RiwayatView(),
-    BantuanView(),
+    HistoryView(),
+    HelpCenterView(),
     ProfileView(),
   ];
 
@@ -94,7 +90,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       ),
       onGenerateRoute: (settings) => generateRoute(settings),
       debugShowCheckedModeBanner: false,
-      home: ref.watch(userDataAuthProvider).when(
+      home: ref.watch(userDataProvider).when(
             data: (user) {
               if (user == null) {
                 return const LoginView();

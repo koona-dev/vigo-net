@@ -1,17 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:isp_app/backend/orders/order.dart';
 import 'package:isp_app/common/widgets/error.dart';
-import 'package:isp_app/features/auth/views/login_view.dart';
-import 'package:isp_app/features/auth/views/otp_view.dart';
-import 'package:isp_app/features/auth/views/register_view.dart';
-import 'package:isp_app/features/auth/views/reset_password_view.dart';
-import 'package:isp_app/features/auth/views/signin_phone_number_view.dart';
-import 'package:isp_app/features/catalog_product/views/catalog_product_view.dart';
-import 'package:isp_app/features/dashboard/views/dashboard_view.dart';
-import 'package:isp_app/features/order_product/views/order_details_view.dart';
-import 'package:isp_app/features/order_product/views/order_product_view.dart';
-import 'package:isp_app/features/profile/views/user_information_view.dart';
-import 'package:isp_app/model/order.dart';
+import 'package:isp_app/ui/views.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -48,13 +38,13 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(
         builder: (context) => const UserInformationView(),
       );
-    case CatalogProductView.routeName:
+    case ProductView.routeName:
       return MaterialPageRoute(
-        builder: (context) => const CatalogProductView(),
+        builder: (context) => const ProductView(),
       );
-    case OrderProductView.routeName:
+    case OrderView.routeName:
       return MaterialPageRoute(
-        builder: (context) => OrderProductView(),
+        builder: (context) => OrderView(),
       );
     case OrderDetailsView.routeName:
       final args = settings.arguments as Orders;

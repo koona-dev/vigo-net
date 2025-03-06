@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:isp_app/backend/user/user_controller.dart';
-import 'package:isp_app/common/routes/router.dart';
-import 'package:isp_app/common/widgets/error.dart';
-import 'firebase_options.dart';
-import 'ui/views.dart';
+import 'package:isp_app/core/routes/router.dart';
+import 'package:isp_app/core/services/firebase_options.dart';
+import 'package:isp_app/features/authentication/presentation/auth/login_view.dart';
+import 'package:isp_app/features/complaint_ticketing/presentation/help_center_view.dart';
+import 'package:isp_app/features/order_internet/presentation/orders/history_view.dart';
+import 'package:isp_app/features/user_management/presentation/profile/profile_view.dart';
+import 'package:isp_app/features/user_management/presentation/user_controller.dart';
+import 'package:isp_app/shared/widgets/error.dart';
+
+import 'features/user_management/presentation/dashboard_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

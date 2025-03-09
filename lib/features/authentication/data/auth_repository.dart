@@ -1,16 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:isp_app/features/authentication/presentation/auth/otp_view.dart';
 import 'package:isp_app/features/authentication/presentation/auth_exception.dart';
-import 'package:isp_app/features/user_management/domain/user.dart';
 
 class AuthRepository {
   final auth = FirebaseAuth.instance;
-  final firestore = FirebaseFirestore.instance.collection('users');
 
-  User get currentUser => auth.currentUser!;
+  User get user => auth.currentUser!;
 
   Future<void> signInWithPhone(
     BuildContext context, {
@@ -23,7 +20,7 @@ class AuthRepository {
           await auth.signInWithCredential(credential);
         },
         verificationFailed: (e) {
-          throw Exception(e.message);
+          throw Exception(e);
         },
         codeSent: ((String verificationId, int? resendToken) async {
           print('VERIFICATION ID : $verificationId');
@@ -35,11 +32,11 @@ class AuthRepository {
         codeAutoRetrievalTimeout: (String verificationId) {},
       );
     } on FirebaseAuthException catch (e) {
-      print(e.message);
+      throw Exception(e);
     }
   }
 
-  void verifyOTP({
+  Future<void> verifyOTP({
     required String verificationId,
     required String userOTP,
   }) async {
@@ -51,58 +48,28 @@ class AuthRepository {
 
       await auth.signInWithCredential(credential);
     } on FirebaseAuthException catch (e) {
-      print(e.message);
+      throw Exception(e);
     }
   }
 
-  Future<void> createUser({
-    required String username,
-    required String password,
-    required String email,
-    required String name,
-  }) async {
+  Future<UserCredential> signup(
+      {required String email, required String password}) async {
     try {
-      final currentUser = auth.currentUser!;
-
-      final user = AuthUser(
-        username: username,
-        password: password,
-        email: email,
-        phone: currentUser.phoneNumber!,
-        name: name,
-      );
-
-      await firestore.doc(currentUser.uid).set(user.toMap());
+      return await auth.createUserWithEmailAndPassword(
+          email: email, password: password);
     } catch (e) {
-      print(e.toString());
+      throw Exception(e);
     }
   }
 
-  Future<AuthUser?> loginUser({
-    required String username,
+  Future<UserCredential> loginUser({
+    required String email,
     required String password,
   }) async {
-    final userId = auth.currentUser?.uid;
-    final user = await firestore.doc(userId).get().then(
-      (doc) {
-        final data = doc.data();
-
-        if (username == data?['username'] && password == data?['password']) {
-          return AuthUser.fromMap({'id': doc.id, ...data!});
-        }
-      },
+    return await auth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
     );
-
-    return user;
-  }
-
-  Future<void> sendPasswordReset(String password) async {
-    try {
-      final uid = auth.currentUser?.uid;
-      await firestore.doc(uid).update({'password': password});
-    } on FirebaseException catch (e) {
-      print(e.message);
-    }
   }
 
   Future<void> signOut() async {
@@ -112,6 +79,4 @@ class AuthRepository {
       throw UserNotLoginException();
     }
   }
-
-  Future<void> deleteUser() async {}
 }

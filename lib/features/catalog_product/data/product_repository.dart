@@ -1,45 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isp_app/features/catalog_product/domain/product.dart';
 
-final productRepoProvider = Provider(
-  (ref) => ProductRepository(FirebaseFirestore.instance),
-);
-
 class ProductRepository {
-  final FirebaseFirestore firestore;
-  ProductRepository(this.firestore);
-
-  Future<Product> getAllProduct() async {
-    final internetData = await _getAllPaketInternet();
-    final addonsData = await _getAllAddons();
-    return Product(
-      internetData: internetData,
-      addonsData: addonsData,
-    );
+  Future<List<Internet>> findAllInternet(Query filter) async {
+    return await filter.get().then((QuerySnapshot querySnapshot) {
+      return querySnapshot.docs.map((doc) {
+        return Internet.fromMap(
+            id: doc.id, data: doc.data() as Map<String, dynamic>);
+      }).toList();
+    });
   }
 
-  Future<List<Internet>> _getAllPaketInternet() async {
-    late List<Internet> internetData;
-
-    final internetFromDB = await firestore.collection('internet').get();
-    final dataMap = internetFromDB.docs.map((item) {
-      return Internet.fromMap(id: item.id, data: item.data());
-    }).toList();
-    internetData = List.from(dataMap);
-
-    return internetData;
-  }
-
-  Future<List<Addons>> _getAllAddons() async {
-    late List<Addons> addonsData;
-
-    final internetFromDB = await firestore.collection('addons').get();
-    final dataMap = internetFromDB.docs.map((item) {
-      return Addons.fromMap(id: item.id, data: item.data());
-    }).toList();
-    addonsData = List.from(dataMap);
-
-    return addonsData;
+  Future<List<Addons>> findAllAddons(Query filter) async {
+    return await filter.get().then((QuerySnapshot querySnapshot) {
+      return querySnapshot.docs.map((doc) {
+        return Addons.fromMap(
+            id: doc.id, data: doc.data() as Map<String, dynamic>);
+      }).toList();
+    });
   }
 }

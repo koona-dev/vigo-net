@@ -1,53 +1,45 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:isp_app/features/user_management/domain/user.dart';
 
 class UserRepository {
-  final firestore = FirebaseFirestore.instance;
-  final currentUser = FirebaseAuth.instance.currentUser!;
+  final _firestore = FirebaseFirestore.instance;
 
-  Future<AuthUser?> getCurrentUserDataFromDb() async {
-    final userFromDB =
-        await firestore.collection('users').doc(currentUser.uid).get();
-    final userData =
-        AuthUser.fromMap({'id': userFromDB.id, ...userFromDB.data()!});
-    return userData;
+  Future<AuthUser?> findOne(Query filter) async {
+    return await filter.get().then((QuerySnapshot querySnapshot) {
+      final doc = querySnapshot.docs.first;
+      return AuthUser.fromMap(
+          {'id': doc.id, ...doc.data() as Map<String, dynamic>});
+    });
   }
 
-  void saveUserInformationToDb(
-      {required String address,
-      required String noKtp,
-      required List<String> photoUrl,
-      photo}) async {
+  Stream<AuthUser> findOneStream(Query filter) {
+    return filter.snapshots().map((snapshot) {
+      final doc = snapshot.docs.first;
+      return AuthUser.fromMap(
+          {'id': doc.id, ...doc.data() as Map<String, dynamic>});
+    });
+  }
+
+  Future<void> create(AuthUser userData) async {
     try {
-      List<String> photoUrl = [
-        'https://png.pngitem.com/pimgs/s/649-6490124_katie-notopoulos-katienotopoulos-i-write-about-tech-round.png'
-      ];
-
-      var user = AuthUser(
-        address: address,
-        noKtp: noKtp,
-        housePhotoUrl: photoUrl,
-      );
-
-      await firestore
-          .collection('users')
-          .doc(currentUser.uid)
-          .update(user.toMap());
+      await _firestore.collection('users').doc().set(userData.toMap());
     } catch (e) {
-      print(e);
+      throw Exception(e);
     }
   }
 
-  Stream<AuthUser> userData(String userId) {
-    return firestore
-        .collection('users')
-        .doc(userId)
-        .snapshots()
-        .map((event) => AuthUser.fromMap({'id': event.id, ...event.data()!}));
+  Future<void> update(AuthUser userData) async {
+    try {
+      await _firestore
+          .collection('users')
+          .doc(userData.id)
+          .update(userData.toMap());
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 
-  void updateUser(Map<String, dynamic> dataUser) async {
-    await firestore.collection('users').doc(currentUser.uid).update(dataUser);
+  Future<void> delete(String id) async {
+    await _firestore.collection('users').doc(id).delete();
   }
 }

@@ -1,4 +1,5 @@
 enum InstalationWifiState {
+  verifikasiPemesanan,
   verifikasiPemasangan,
   menungguTeknisi,
   pasangWifi,

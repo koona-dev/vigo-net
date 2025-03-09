@@ -39,7 +39,7 @@ class _UserInformationViewState extends ConsumerState<UserInformationView> {
   }
 
   void _saveUserData() async {
-    ref.read(userControllerProvider).saveUserInformationToDb(
+    ref.read(userControllerProvider).addUserInformation(
           address: _addressController.text,
           noKtp: _noKtpController.text,
           photoRumah: _images,

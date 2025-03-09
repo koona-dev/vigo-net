@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:isp_app/core/conststans/product_type.dart';
 import 'package:isp_app/features/order_internet/domain/cart.dart';
 import 'package:isp_app/features/order_internet/domain/checkout.dart';
 import 'package:isp_app/features/user_management/domain/user.dart';
 import 'package:isp_app/features/user_management/presentation/user_controller.dart';
-
-final cartProvider = ChangeNotifierProvider<CartNotifier>((ref) {
-  final currentUser = ref.watch(userDataProvider).value;
-  return CartNotifier(currentUser!);
-});
 
 class CartNotifier extends ChangeNotifier {
   final AuthUser currentUser;
@@ -128,3 +124,8 @@ class CartNotifier extends ChangeNotifier {
     notifyListeners();
   }
 }
+
+final cartProvider = ChangeNotifierProvider.autoDispose<CartNotifier>((ref) {
+  final currentUser = ref.watch(currentUserProvider).value;
+  return CartNotifier(currentUser!);
+});

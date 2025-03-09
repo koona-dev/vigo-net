@@ -6,7 +6,7 @@ import 'package:isp_app/features/order_internet/domain/order.dart';
 import 'package:isp_app/features/order_internet/presentation/order_controller.dart';
 import 'package:isp_app/features/order_internet/presentation/orders/order_details_view.dart';
 import 'package:isp_app/shared/widgets/error.dart';
-import 'package:isp_app/features/complaint_ticketing/domain/ticket_status.dart';
+import 'package:isp_app/features/ticketing/domain/ticket_status.dart';
 
 class HistoryView extends ConsumerStatefulWidget {
   @override
@@ -42,7 +42,7 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
 
   @override
   Widget build(BuildContext context) {
-    final ordersData = ref.watch(orderDataProvider);
+    final ordersData = ref.watch(getOrderByUserProvider);
 
     return DefaultTabController(
       length: 3,

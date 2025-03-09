@@ -27,7 +27,7 @@ class _OTPViewState extends ConsumerState<OTPView> {
   }
 
   void _verifikasiKodeOtp() {
-    ref.read(authController).verifyOTP(
+    ref.read(authControllerProvider).verifyOTP(
           verificationId: widget.verificationId,
           userOTP: _otpController.text,
         );

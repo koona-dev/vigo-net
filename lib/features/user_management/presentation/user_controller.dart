@@ -1,49 +1,61 @@
 import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isp_app/core/services/image_storage_repository.dart';
+import 'package:isp_app/core/utils/firestore_filter.dart';
+import 'package:isp_app/features/authentication/data/auth_repository.dart';
 import 'package:isp_app/features/user_management/data/user_repository.dart';
 import 'package:isp_app/features/user_management/domain/user.dart';
 
-final userControllerProvider = Provider((ref) {
+final userControllerProvider = Provider.autoDispose((ref) {
   return UserController(ref);
 });
 
-final userDataProvider = FutureProvider((ref) {
+final currentUserProvider = FutureProvider.autoDispose((ref) {
   final userController = ref.watch(userControllerProvider);
-  return userController.getCurrentUserData();
+  return userController.getCurrentUser;
 });
 
 class UserController {
   final Ref ref;
-  final UserRepository userRepository = UserRepository();
+  final AuthRepository _authRepository = AuthRepository();
+  final UserRepository _userRepository = UserRepository();
 
   UserController(this.ref);
 
-  Future<AuthUser?> getCurrentUserData() async {
-    AuthUser? user = await userRepository.getCurrentUserDataFromDb();
-    return user;
+  Future<AuthUser?> get getCurrentUser async {
+    final filter = getFilteredQuery('users', {
+      'id': {'isEqualTo': _authRepository.user.uid}
+    });
+    return await _userRepository.findOne(filter);
   }
 
-  Future<void> saveUserInformationToDb({
+  Future<void> addUserInformation({
     required String address,
     required String noKtp,
     required List<File?> photoRumah,
   }) async {
-    final currentUser = await getCurrentUserData();
+    final uid = _authRepository.user.uid;
     final List<String> photoUrl =
         await ref.read(imageStorageRepositoryProvider).uploadFiles(
-              ref: 'photoRumah/${currentUser?.id}',
+              ref: 'photoRumah/${uid}',
               files: photoRumah,
             );
 
-    userRepository.saveUserInformationToDb(
+    var user = AuthUser(
+      id: _authRepository.user.uid,
       address: address,
       noKtp: noKtp,
-      photoUrl: photoUrl,
+      housePhotoUrl: photoUrl,
     );
+
+    _userRepository.update(user);
   }
 
-  void editProfile(Map<String, dynamic> data) {
-    userRepository.updateUser(data);
+  void editProfile(AuthUser user) {
+    _userRepository.update(user);
+  }
+
+  void deleteAccount() {
+    _userRepository.delete(_authRepository.user.uid);
   }
 }

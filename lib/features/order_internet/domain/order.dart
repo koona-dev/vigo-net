@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:isp_app/features/complaint_ticketing/domain/ticket_status.dart';
+import 'package:isp_app/features/ticketing/domain/ticket_status.dart';
 import 'package:isp_app/features/order_internet/domain/cart.dart';
 import 'package:isp_app/features/order_internet/domain/types.dart';
 

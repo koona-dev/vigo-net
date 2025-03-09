@@ -34,7 +34,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
       _fullnameController.text != '';
 
   void _submitRegister() {
-    ref.read(authController).registerUser(
+    ref.read(authControllerProvider).registerUser(
           email: _emailController.text,
           username: _usernameController.text,
           password: _passwordController.text,

@@ -29,7 +29,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
       _usernameController.text != '' && _passwordController.text != '';
 
   void _submitLogin() async {
-    final result = await ref.read(authController).loginUser(
+    final result = await ref.read(authControllerProvider).loginUser(
           username: _usernameController.text,
           password: _passwordController.text,
         );

@@ -44,7 +44,7 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(userDataProvider).value!;
+    final user = ref.watch(currentUserProvider).value!;
     final currentOrder = ref.watch(currentOrderProvider);
 
     return Padding(

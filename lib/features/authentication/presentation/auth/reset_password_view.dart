@@ -22,7 +22,7 @@ class _ResetPasswordViewState extends ConsumerState<ResetPasswordView> {
   }
 
   void _submitNewPassword() {
-    ref.read(authController).resetPassword(_passwordController.text);
+    ref.read(authControllerProvider).resetPassword(_passwordController.text);
     Navigator.of(context).pushReplacementNamed(LoginView.routeName);
   }
 

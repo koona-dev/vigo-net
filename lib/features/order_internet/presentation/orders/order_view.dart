@@ -3,7 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isp_app/core/conststans/product_type.dart';
 import 'package:isp_app/features/order_internet/presentation/cart_controller.dart';
 import 'package:isp_app/features/order_internet/presentation/order_controller.dart';
+import 'package:isp_app/features/ticketing/domain/activity.dart';
+import 'package:isp_app/features/ticketing/domain/activity_states/activity_status.dart';
+import 'package:isp_app/features/ticketing/domain/category.dart';
+import 'package:isp_app/features/ticketing/domain/ticket_status.dart';
+import 'package:isp_app/features/ticketing/domain/ticketing.dart';
+import 'package:isp_app/features/ticketing/presentation/ticketing_controller.dart';
 import 'package:isp_app/features/user_management/presentation/dashboard_view.dart';
+import 'package:isp_app/features/user_management/presentation/user_controller.dart';
 
 class OrderView extends ConsumerStatefulWidget {
   static const routeName = '/my-order';
@@ -15,6 +22,7 @@ class OrderView extends ConsumerStatefulWidget {
 class _OrderViewState extends ConsumerState<OrderView> {
   @override
   Widget build(BuildContext context) {
+    final user = ref.watch(currentUserProvider).value!;
     final orderProvider = ref.watch(cartProvider);
     final orderData = orderProvider.showNote;
     final internet = orderData.products
@@ -112,6 +120,20 @@ class _OrderViewState extends ConsumerState<OrderView> {
             FilledButton(
               onPressed: () {
                 ref.read(orderControllerProvider).createOrder();
+                ref.read(ticketingControllerProvider).createTicketing(Ticketing(
+                      title: 'Order Sambung Baru',
+                      activity: Activity(
+                        title: 'Verifikasi Pemesanan',
+                        description: 'Menunggu verifikasi',
+                        status: ActivityStatus.onprogress,
+                      ),
+                      category: TicketCategory.pemesanan,
+                      description: 'sambung baru',
+                      startDate: DateTime.now(),
+                      endDate: DateTime.now().add(const Duration(days: 1)),
+                      status: TicketStatus.menunggu,
+                      userId: user.id!,
+                    ));
                 Navigator.pushNamedAndRemoveUntil(
                     context, DashboardView.routeName, (route) => false);
               },

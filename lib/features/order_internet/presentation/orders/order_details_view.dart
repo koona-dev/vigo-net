@@ -28,7 +28,6 @@ class _OrderDetailsViewState extends ConsumerState<OrderDetailsView> {
       if (item.productType == ProductType.addons) {
         return total + item.price;
       }
-
       return total;
     });
     final orderDate = DateFormat.yMMMd().format(widget.order.tanggalOrder);

@@ -22,7 +22,7 @@ class _SigninPhoneNumberViewState extends ConsumerState<SigninPhoneNumberView> {
   }
 
   void _registerPhone() {
-    ref.read(authController).signInWithPhone(
+    ref.read(authControllerProvider).signInWithPhone(
           context,
           phoneNumber: _phoneController.text,
         );

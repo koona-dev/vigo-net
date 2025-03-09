@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:isp_app/features/complaint_ticketing/domain/category.dart';
-import 'package:isp_app/features/complaint_ticketing/domain/ticket_status.dart';
-import 'package:isp_app/features/order_internet/domain/activity.dart';
+import 'package:isp_app/features/ticketing/domain/category.dart';
+import 'package:isp_app/features/ticketing/domain/ticket_status.dart';
+import 'package:isp_app/features/ticketing/domain/activity.dart';
 
 class Ticketing extends Equatable {
-  final String id;
+  final String? id;
+  final String userId;
   final String title;
   final String description;
   final TicketStatus status;
@@ -15,7 +16,8 @@ class Ticketing extends Equatable {
   final DateTime endDate;
 
   const Ticketing({
-    required this.id,
+    this.id,
+    required this.userId,
     required this.title,
     required this.description,
     required this.status,
@@ -25,14 +27,14 @@ class Ticketing extends Equatable {
     required this.endDate,
   });
 
-  factory Ticketing.fromMap({
-    required String id,
-    required Map<String, dynamic> data,
-  }) {
+  factory Ticketing.fromMap(
+    Map<String, dynamic> data,
+  ) {
     return Ticketing(
-      id: id,
-      title: data['title'] ?? '',
-      description: data['description'] ?? '',
+      id: data['id'] ?? '',
+      userId: data['userId'],
+      title: data['title'],
+      description: data['description'],
       status: TicketStatus.values
           .firstWhere((element) => element.name == data['status']),
       activity: Activity.fromMap(data['activity']),
@@ -45,6 +47,7 @@ class Ticketing extends Equatable {
 
   Map<String, dynamic> toMap() {
     return {
+      'userId': userId,
       'title': title,
       'description': description,
       'status': status.name,
@@ -58,6 +61,7 @@ class Ticketing extends Equatable {
   @override
   List<Object?> get props => [
         id,
+        userId,
         title,
         description,
         status,

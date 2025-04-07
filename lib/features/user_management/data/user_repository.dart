@@ -4,8 +4,14 @@ import 'package:isp_app/features/user_management/domain/user.dart';
 class UserRepository {
   final _firestore = FirebaseFirestore.instance;
 
-  Future<AuthUser?> findOne(Query filter) async {
-    return await filter.get().then((QuerySnapshot querySnapshot) {
+  Future<AuthUser?> findOne({String? uid, Query? filter}) async {
+    if (uid != null) {
+      return await _firestore.collection('users').doc(uid).get().then((doc) {
+        return AuthUser.fromMap(
+            {'id': doc.id, ...doc.data() as Map<String, dynamic>});
+      });
+    }
+    return await filter?.get().then((QuerySnapshot querySnapshot) {
       final doc = querySnapshot.docs.first;
       return AuthUser.fromMap(
           {'id': doc.id, ...doc.data() as Map<String, dynamic>});

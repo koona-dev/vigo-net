@@ -25,12 +25,11 @@ class Orders extends Equatable {
     this.masaBerlakuPaket,
   });
 
-  factory Orders.fromMap({
-    required String id,
-    required Map<String, dynamic> data,
-  }) {
+  factory Orders.fromMap(
+    Map<String, dynamic> data,
+  ) {
     return Orders(
-      id: id,
+      id: data['id'] ?? '',
       userId: data['userId'] ?? '',
       cartItems:
           data['cartItems'].map<Cart>((cart) => Cart.fromMap(cart)).toList(),

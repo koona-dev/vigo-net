@@ -16,14 +16,18 @@ class OrderController {
 
   final _orderRepository = OrderRepository();
 
-  Future<Orders?> get currentOrder async {
+  Future<Orders?> get currentOrderPemasangan async {
     final filter = getFilteredQuery('orders', {
       'userId': {
         'isEqualTo': currentUser?.id,
       },
       'jenisPemesanan': {'isEqualTo': JenisPemesanan.pasangBaru.name},
     });
-    return await _orderRepository.findOne(filter);
+    return await _orderRepository.findOne(filter: filter);
+  }
+
+  Future<Orders?> currentOrderDetails(String docId) async {
+    return await _orderRepository.findOne(docId: docId);
   }
 
   Stream<List<Orders>> getOrdersByUser() {
@@ -62,14 +66,20 @@ class OrderController {
 }
 
 final orderControllerProvider = Provider.autoDispose((ref) {
-  final currentUser = ref.watch(currentUserProvider).value;
+  final currentUser = ref.watch(userDataProvider).value;
 
   return OrderController(ref: ref, currentUser: currentUser);
 });
 
-final currentOrderProvider = FutureProvider.autoDispose((ref) {
+final currentOrderPemasanganProvider = FutureProvider.autoDispose((ref) {
   final orderController = ref.watch(orderControllerProvider);
-  return orderController.currentOrder;
+  return orderController.currentOrderPemasangan;
+});
+
+final currentOrderDetailsProvider =
+    FutureProvider.family.autoDispose((ref, String docId) {
+  final orderController = ref.watch(orderControllerProvider);
+  return orderController.currentOrderDetails(docId);
 });
 
 final getOrderByUserProvider = StreamProvider.autoDispose((ref) {

@@ -5,19 +5,19 @@ import 'package:isp_app/features/authentication/presentation/auth/otp_view.dart'
 import 'package:isp_app/features/authentication/presentation/auth_exception.dart';
 
 class AuthRepository {
-  final auth = FirebaseAuth.instance;
+  final _auth = FirebaseAuth.instance;
 
-  User get user => auth.currentUser!;
+  User? get user => _auth.currentUser;
 
   Future<void> signInWithPhone(
     BuildContext context, {
     required String phoneNumber,
   }) async {
     try {
-      await auth.verifyPhoneNumber(
+      await _auth.verifyPhoneNumber(
         phoneNumber: phoneNumber,
         verificationCompleted: (PhoneAuthCredential credential) async {
-          await auth.signInWithCredential(credential);
+          await _auth.signInWithCredential(credential);
         },
         verificationFailed: (e) {
           throw Exception(e);
@@ -46,7 +46,7 @@ class AuthRepository {
         smsCode: userOTP,
       );
 
-      await auth.signInWithCredential(credential);
+      await _auth.signInWithCredential(credential);
     } on FirebaseAuthException catch (e) {
       throw Exception(e);
     }
@@ -55,7 +55,7 @@ class AuthRepository {
   Future<UserCredential> signup(
       {required String email, required String password}) async {
     try {
-      return await auth.createUserWithEmailAndPassword(
+      return await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
     } catch (e) {
       throw Exception(e);
@@ -66,15 +66,15 @@ class AuthRepository {
     required String email,
     required String password,
   }) async {
-    return await auth.signInWithEmailAndPassword(
+    return await _auth.signInWithEmailAndPassword(
       email: email,
       password: password,
     );
   }
 
   Future<void> signOut() async {
-    if (auth.currentUser != null) {
-      await auth.signOut();
+    if (_auth.currentUser != null) {
+      await _auth.signOut();
     } else {
       throw UserNotLoginException();
     }

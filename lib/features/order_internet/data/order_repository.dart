@@ -2,15 +2,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:isp_app/features/order_internet/domain/order.dart';
 
 class OrderRepository {
-  final firestore = FirebaseFirestore.instance;
+  final _firestore = FirebaseFirestore.instance;
 
-  Future<Orders> findOne(Query filter) async {
-    final snapshot = await filter.limit(1).get();
+  Future<Orders?> findOne({String? docId, Query? filter}) async {
+    if (docId != null) {
+      return await _firestore.collection('orders').doc(docId).get().then((doc) {
+        return Orders.fromMap(
+            {'id': doc.id, ...doc.data() as Map<String, dynamic>});
+      });
+    }
 
-    final doc = snapshot.docs.first;
-    final order =
-        Orders.fromMap(id: doc.id, data: doc.data() as Map<String, dynamic>);
-    return order;
+    return await filter?.limit(1).get().then((QuerySnapshot querySnapshot) {
+      final doc = querySnapshot.docs.first;
+      return Orders.fromMap(
+          {'id': doc.id, ...doc.data() as Map<String, dynamic>});
+    });
   }
 
   Stream<List<Orders>> findMany(Query filter) {
@@ -18,7 +24,7 @@ class OrderRepository {
           (collection) => collection.docs.map(
             (doc) {
               return Orders.fromMap(
-                  id: doc.id, data: doc.data() as Map<String, dynamic>);
+                  {'id': doc.id, ...doc.data() as Map<String, dynamic>});
             },
           ).toList(),
         );
@@ -26,13 +32,13 @@ class OrderRepository {
 
   Future<void> insert(Orders orders) async {
     try {
-      await firestore.collection('orders').doc().set(orders.toMap());
+      await _firestore.collection('orders').doc().set(orders.toMap());
     } catch (e) {
       throw Exception(e);
     }
   }
 
   void delete(String orderId) {
-    firestore.collection('orders').doc(orderId).delete();
+    _firestore.collection('orders').doc(orderId).delete();
   }
 }

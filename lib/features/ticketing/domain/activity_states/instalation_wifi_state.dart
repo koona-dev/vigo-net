@@ -1,3 +1,5 @@
+sealed class ActivityState {}
+
 enum InstalationWifiState {
   verifikasiPemesanan,
   verifikasiPemasangan,

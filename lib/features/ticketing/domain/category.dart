@@ -2,7 +2,7 @@ enum TicketCategory {
   pemesanan,
   pemasangan,
   upgradePaket,
-  berhentiBerlangAganan,
+  berhentiBerlangganan,
   gangguan,
   pengajuan,
 }

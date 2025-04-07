@@ -5,6 +5,7 @@ import 'package:isp_app/features/order_internet/presentation/cart_controller.dar
 import 'package:isp_app/features/order_internet/presentation/order_controller.dart';
 import 'package:isp_app/features/ticketing/domain/activity.dart';
 import 'package:isp_app/features/ticketing/domain/activity_states/activity_status.dart';
+import 'package:isp_app/features/ticketing/domain/activity_states/instalation_wifi_state.dart';
 import 'package:isp_app/features/ticketing/domain/category.dart';
 import 'package:isp_app/features/ticketing/domain/ticket_status.dart';
 import 'package:isp_app/features/ticketing/domain/ticketing.dart';
@@ -22,7 +23,7 @@ class OrderView extends ConsumerStatefulWidget {
 class _OrderViewState extends ConsumerState<OrderView> {
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(currentUserProvider).value!;
+    final user = ref.watch(userDataProvider).value!;
     final orderProvider = ref.watch(cartProvider);
     final orderData = orderProvider.showNote;
     final internet = orderData.products
@@ -119,21 +120,23 @@ class _OrderViewState extends ConsumerState<OrderView> {
             SizedBox(height: 20),
             FilledButton(
               onPressed: () {
+                final ticket = Ticketing(
+                  title: 'Order Sambung Baru',
+                  activity: Activity(
+                    title: 'Verifikasi Pemesanan',
+                    description: 'Menunggu verifikasi',
+                    status: ActivityStatus.menunggu,
+                    flag: InstalationWifiState.verifikasiPemesanan.name,
+                  ),
+                  category: TicketCategory.pemesanan,
+                  description: 'Sambung Baru',
+                  startDate: DateTime.now(),
+                  endDate: DateTime.now().add(const Duration(days: 1)),
+                  status: TicketStatus.menunggu,
+                  userId: user.id!,
+                );
                 ref.read(orderControllerProvider).createOrder();
-                ref.read(ticketingControllerProvider).createTicketing(Ticketing(
-                      title: 'Order Sambung Baru',
-                      activity: Activity(
-                        title: 'Verifikasi Pemesanan',
-                        description: 'Menunggu verifikasi',
-                        status: ActivityStatus.onprogress,
-                      ),
-                      category: TicketCategory.pemesanan,
-                      description: 'sambung baru',
-                      startDate: DateTime.now(),
-                      endDate: DateTime.now().add(const Duration(days: 1)),
-                      status: TicketStatus.menunggu,
-                      userId: user.id!,
-                    ));
+                ref.read(ticketingControllerProvider).createTicketing(ticket);
                 Navigator.pushNamedAndRemoveUntil(
                     context, DashboardView.routeName, (route) => false);
               },

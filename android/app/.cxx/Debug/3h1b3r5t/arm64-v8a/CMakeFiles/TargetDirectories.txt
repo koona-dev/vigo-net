@@ -1,0 +1,2 @@
+C:/Users/HP/Documents/MANG_WID/development/mobile development/flutter/projects/vigo_net/android/app/.cxx/Debug/3h1b3r5t/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/HP/Documents/MANG_WID/development/mobile development/flutter/projects/vigo_net/android/app/.cxx/Debug/3h1b3r5t/arm64-v8a/CMakeFiles/rebuild_cache.dir

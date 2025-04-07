@@ -3,6 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:isp_app/core/conststans/product_type.dart';
 import 'package:isp_app/features/order_internet/domain/order.dart';
+import 'package:isp_app/features/ticketing/domain/activity_states/instalation_wifi_state.dart';
+import 'package:isp_app/features/ticketing/presentation/ticketing_controller.dart';
+import 'package:isp_app/features/user_management/presentation/user_controller.dart';
 
 class OrderDetailsView extends ConsumerStatefulWidget {
   final Orders order;
@@ -102,28 +105,53 @@ class _OrderDetailsViewState extends ConsumerState<OrderDetailsView> {
             SizedBox(height: 12),
             Divider(),
             SizedBox(height: 12),
-            Text('Status Pemasangan'),
-            SizedBox(height: 12),
-            Row(
-              children: [
-                Icon(Icons.done, size: 24),
-                SizedBox(width: 20),
-                Flexible(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Registrasi Pelanggan Baru'),
-                      SizedBox(height: 8),
-                      Text(
-                          'Berhasil Menyetujui kontrak. Admin menentukan teknisi dan jadwal pemasangan'),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+            _activityOrder(),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _activityOrder() {
+    final user = ref.watch(userDataProvider).value!;
+    final currentTicket = ref.watch(findOneTicketOrderProvider(user.id!)).value;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Status Pemasangan'),
+        SizedBox(height: 12),
+        Row(
+          children: [
+            Icon(Icons.done, size: 24),
+            SizedBox(width: 20),
+            Flexible(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(currentTicket!.activity.title),
+                  SizedBox(height: 8),
+                  Text(currentTicket.activity.description),
+                  currentTicket.activity.flag ==
+                          InstalationWifiState.bayarInstalasi.name
+                      ? FilledButton(
+                          onPressed: () {
+                            ref
+                                .read(ticketingControllerProvider.notifier)
+                                .updateTicket(
+                                  ticketId: currentTicket.id!,
+                                  activity: InstalationWifiState.bayarInstalasi,
+                                );
+                          },
+                          child: Text('Bayar Instalasi'),
+                        )
+                      : SizedBox.shrink(),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

@@ -4,10 +4,20 @@ import 'package:isp_app/features/ticketing/domain/ticketing.dart';
 class TicketingRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<Ticketing> findOne(Query filterQuery) async {
+  Future<Ticketing?> findOne({String? docId, Query? filterQuery}) async {
     try {
+      if (docId != null) {
+        return await _firestore
+            .collection('ticketing')
+            .doc(docId)
+            .get()
+            .then((doc) {
+          return Ticketing.fromMap(
+              {'id': doc.id, ...doc.data() as Map<String, dynamic>});
+        });
+      }
       return await filterQuery
-          .limit(1)
+          ?.limit(1)
           .get()
           .then((QuerySnapshot querySnapshot) {
         final doc = querySnapshot.docs.first;

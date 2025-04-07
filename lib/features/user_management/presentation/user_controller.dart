@@ -1,7 +1,7 @@
 import 'dart:io';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:isp_app/core/services/image_storage_repository.dart';
-import 'package:isp_app/core/utils/firestore_filter.dart';
+import 'package:isp_app/core/services/image_service.dart';
 import 'package:isp_app/features/authentication/data/auth_repository.dart';
 import 'package:isp_app/features/user_management/data/user_repository.dart';
 import 'package:isp_app/features/user_management/domain/user.dart';
@@ -10,9 +10,9 @@ final userControllerProvider = Provider.autoDispose((ref) {
   return UserController(ref);
 });
 
-final currentUserProvider = FutureProvider.autoDispose((ref) {
+final userDataProvider = FutureProvider.autoDispose((ref) {
   final userController = ref.watch(userControllerProvider);
-  return userController.getCurrentUser;
+  return userController.userData;
 });
 
 class UserController {
@@ -22,11 +22,8 @@ class UserController {
 
   UserController(this.ref);
 
-  Future<AuthUser?> get getCurrentUser async {
-    final filter = getFilteredQuery('users', {
-      'id': {'isEqualTo': _authRepository.user.uid}
-    });
-    return await _userRepository.findOne(filter);
+  Future<AuthUser?> get userData async {
+    return await _userRepository.findOne(uid: _authRepository.user?.uid);
   }
 
   Future<void> addUserInformation({
@@ -34,15 +31,15 @@ class UserController {
     required String noKtp,
     required List<File?> photoRumah,
   }) async {
-    final uid = _authRepository.user.uid;
-    final List<String> photoUrl =
-        await ref.read(imageStorageRepositoryProvider).uploadFiles(
-              ref: 'photoRumah/${uid}',
-              files: photoRumah,
-            );
+    final uid = _authRepository.user?.uid;
+    final imageService = ImageService();
+    final List<String> photoUrl = await imageService.uploadFiles(
+      ref: 'photoRumah/${uid}',
+      files: photoRumah,
+    );
 
     var user = AuthUser(
-      id: _authRepository.user.uid,
+      id: _authRepository.user?.uid,
       address: address,
       noKtp: noKtp,
       housePhotoUrl: photoUrl,
@@ -56,6 +53,6 @@ class UserController {
   }
 
   void deleteAccount() {
-    _userRepository.delete(_authRepository.user.uid);
+    _userRepository.delete(_authRepository.user!.uid);
   }
 }

@@ -5,7 +5,7 @@ import 'package:isp_app/features/user_management/domain/user.dart';
 class Customer extends Equatable {
   final String id;
   final AuthUser user;
-  final String noInternet;
+  final String nomorInternet;
   final InternetStatus status;
   final InternetData internetData;
   final String noVa;
@@ -13,7 +13,7 @@ class Customer extends Equatable {
   const Customer({
     required this.id,
     required this.user,
-    required this.noInternet,
+    required this.nomorInternet,
     this.status = InternetStatus.online,
     required this.internetData,
     required this.noVa,
@@ -25,7 +25,7 @@ class Customer extends Equatable {
     return Customer(
       id: data['id'],
       user: AuthUser.fromMap(data),
-      noInternet: data['noInternet'],
+      nomorInternet: data['nomorInternet'],
       status: InternetStatus.values
           .firstWhere((element) => element.name == data['status']),
       noVa: data['noVa'],
@@ -37,7 +37,7 @@ class Customer extends Equatable {
     return {
       'id': id,
       'user': user.toMap(),
-      'noInternet': noInternet,
+      'nomorInternet': nomorInternet,
       'status': status,
       'noVa': noVa,
       'internetData': internetData.toMap(),
@@ -48,7 +48,7 @@ class Customer extends Equatable {
   List<Object?> get props => [
         id,
         user,
-        noInternet,
+        nomorInternet,
         status,
         noVa,
         internetData,
@@ -57,23 +57,24 @@ class Customer extends Equatable {
 
 class InternetData extends Equatable {
   final String packageId;
-  final List<String> addons;
+  final List<String> addonsId;
 
-  InternetData({required this.packageId, required this.addons});
+  InternetData({required this.packageId, required this.addonsId});
 
   factory InternetData.fromMap(
     Map<String, dynamic> data,
   ) {
-    return InternetData(addons: data['addons'], packageId: data['packageId']);
+    return InternetData(
+        addonsId: data['addonsId'], packageId: data['packageId']);
   }
 
   Map<String, dynamic> toMap() {
     return {
       'packageId': packageId,
-      'addons': addons,
+      'addonsId': addonsId,
     };
   }
 
   @override
-  List<Object?> get props => [packageId, addons];
+  List<Object?> get props => [packageId, addonsId];
 }

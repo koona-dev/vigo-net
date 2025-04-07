@@ -126,6 +126,6 @@ class CartNotifier extends ChangeNotifier {
 }
 
 final cartProvider = ChangeNotifierProvider.autoDispose<CartNotifier>((ref) {
-  final currentUser = ref.watch(currentUserProvider).value;
+  final currentUser = ref.watch(userDataProvider).value;
   return CartNotifier(currentUser!);
 });

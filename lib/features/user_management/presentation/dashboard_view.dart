@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isp_app/features/catalog_product/presentation/products/product_view.dart';
+import 'package:isp_app/features/order_internet/domain/order.dart';
 import 'package:isp_app/features/order_internet/presentation/order_controller.dart';
 import 'package:isp_app/features/order_internet/presentation/orders/order_details_view.dart';
+import 'package:isp_app/features/ticketing/presentation/ticketing_controller.dart';
+import 'package:isp_app/features/user_management/domain/user.dart';
 import 'package:isp_app/features/user_management/presentation/profile/user_information_view.dart';
 import 'package:isp_app/features/user_management/presentation/user_controller.dart';
 import 'package:isp_app/shared/widgets/error.dart';
@@ -17,15 +20,20 @@ class DashboardView extends ConsumerStatefulWidget {
 }
 
 class _DashboardViewState extends ConsumerState<DashboardView> {
-  Widget _showActivity(order) {
+  Widget _showActivity(AuthUser user, Orders order) {
+    final currentTicket =
+        ref.watch(findOneTicketOrderProvider(user.id!)).value!;
+
+    print('CURRENT TICKET: ${currentTicket.activity}');
+
     return ListTile(
       tileColor: Colors.indigo.shade700,
       title: Text(
-        'Pesanan Anda Berhasil di Verifikasi',
+        currentTicket.activity.title,
         style: TextStyle(color: Colors.white),
       ),
       subtitle: Text(
-        'Ticket pemesanan Anda berlaku sampai 20 maret 2024',
+        currentTicket.activity.description,
         style: TextStyle(color: Colors.white),
       ),
       trailing: Icon(
@@ -44,8 +52,11 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(currentUserProvider).value!;
-    final currentOrder = ref.watch(currentOrderProvider);
+    final user = ref.watch(userDataProvider).value!;
+    final currentOrder = ref.watch(currentOrderPemasanganProvider);
+
+    print('USER: $user');
+    print('CURRENT ORDER: $currentOrder');
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -54,7 +65,7 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
         children: [
           currentOrder.when(
             data: (data) => data != null
-                ? _showActivity(data)
+                ? _showActivity(user, data)
                 : Card(
                     margin: EdgeInsets.all(24),
                     child: Padding(

@@ -4,30 +4,6 @@ import 'package:isp_app/features/ticketing/data/ticketing_repository.dart';
 import 'package:isp_app/features/ticketing/domain/category.dart';
 import 'package:isp_app/features/ticketing/domain/ticketing.dart';
 
-final ticketingControllerProvider = Provider.autoDispose((ref) {
-  return TicketingController(
-    ref: ref,
-  );
-});
-
-final findOneTicketProvider =
-    FutureProvider.family.autoDispose<Ticketing, String>((ref, ticketId) {
-  final ticketController = ref.watch(ticketingControllerProvider);
-  return ticketController.findOneTicket(ticketId);
-});
-
-final findOneTicketOrderProvider =
-    FutureProvider.family.autoDispose<Ticketing, String>((ref, userId) {
-  final ticketController = ref.watch(ticketingControllerProvider);
-  return ticketController.findOneTicketOrder(userId);
-});
-
-final getAllTicketingProvider =
-    StreamProvider.family.autoDispose<List<Ticketing?>, String>((ref, userId) {
-  final ticketController = ref.watch(ticketingControllerProvider);
-  return ticketController.getAllTicketingByUser(userId);
-});
-
 class TicketingController {
   final Ref ref;
   TicketingController({
@@ -36,21 +12,18 @@ class TicketingController {
 
   final _ticketingRepository = TicketingRepository();
 
-  Future<Ticketing> findOneTicket(String ticketId) async {
-    final filter = getFilteredQuery('ticketing', {
-      'id': {'isEqualTo': ticketId},
-    });
-    return await _ticketingRepository.findOne(filter);
+  Future<Ticketing?> findOneTicket(String docId) async {
+    return await _ticketingRepository.findOne(docId: docId);
   }
 
-  Future<Ticketing> findOneTicketOrder(
+  Future<Ticketing?> findOneTicketOrder(
     String userId,
   ) async {
     final filter = getFilteredQuery('ticketing', {
-      'id': {'isEqualTo': userId},
-      'category': {'isEqualTo': TicketCategory.pemesanan.name},
+      'userId': {'isEqualTo': userId},
+      'category': {'isEqualTo': TicketCategory.pemasangan.name},
     });
-    return await _ticketingRepository.findOne(filter);
+    return await _ticketingRepository.findOne(filterQuery: filter);
   }
 
   Stream<List<Ticketing>> getAllTicketingByUser(String userId) {
@@ -76,3 +49,27 @@ class TicketingController {
     _ticketingRepository.delete(orderId);
   }
 }
+
+final ticketingControllerProvider = Provider.autoDispose((ref) {
+  return TicketingController(
+    ref: ref,
+  );
+});
+
+final findOneTicketProvider =
+    FutureProvider.family.autoDispose<Ticketing?, String>((ref, ticketId) {
+  final ticketController = ref.watch(ticketingControllerProvider);
+  return ticketController.findOneTicket(ticketId);
+});
+
+final findOneTicketOrderProvider =
+    FutureProvider.family.autoDispose<Ticketing?, String>((ref, userId) {
+  final ticketController = ref.watch(ticketingControllerProvider);
+  return ticketController.findOneTicketOrder(userId);
+});
+
+final getAllTicketingProvider =
+    StreamProvider.family.autoDispose<List<Ticketing?>, String>((ref, userId) {
+  final ticketController = ref.watch(ticketingControllerProvider);
+  return ticketController.getAllTicketingByUser(userId);
+});

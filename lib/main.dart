@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:isp_app/core/routes/router.dart';
-import 'package:isp_app/core/services/firebase_options.dart';
+import 'package:isp_app/core/services/firebase_service.dart';
 import 'package:isp_app/features/authentication/presentation/auth/login_view.dart';
+import 'package:isp_app/features/authentication/presentation/auth_controller.dart';
 import 'package:isp_app/features/ticketing/presentation/help_center_view.dart';
 import 'package:isp_app/features/order_internet/presentation/orders/history_view.dart';
 import 'package:isp_app/features/user_management/presentation/profile/profile_view.dart';
-import 'package:isp_app/features/user_management/presentation/user_controller.dart';
-import 'package:isp_app/shared/widgets/error.dart';
-
-import 'features/user_management/presentation/dashboard_view.dart';
+import 'package:isp_app/features/user_management/presentation/dashboard_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -87,6 +86,8 @@ class _MyAppState extends ConsumerState<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    final authController = ref.watch(authControllerProvider);
+
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -95,53 +96,40 @@ class _MyAppState extends ConsumerState<MyApp> {
       ),
       onGenerateRoute: (settings) => generateRoute(settings),
       debugShowCheckedModeBanner: false,
-      home: ref.watch(currentUserProvider).when(
-            data: (user) {
-              if (user == null) {
-                return const LoginView();
-              }
-              return Scaffold(
-                appBar: _appBarList.elementAt(currentViewIdx),
-                bottomNavigationBar: BottomNavigationBar(
-                  selectedItemColor: Colors.deepOrange,
-                  unselectedItemColor: Colors.black45,
-                  items: [
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.home),
-                      label: 'Home',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.text_snippet),
-                      label: 'Riwayat',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.help),
-                      label: 'Bantuan',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.person),
-                      label: 'Profile',
-                    ),
-                  ],
-                  currentIndex: currentViewIdx,
-                  onTap: (index) {
-                    setState(() {
-                      currentViewIdx = index;
-                    });
-                  },
-                ),
-                body: _contentList.elementAt(currentViewIdx),
-              );
-            },
-            error: (err, trace) {
-              return ErrorView(error: err.toString());
-            },
-            loading: () => const Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(),
+      home: authController.currentUserLogin == null
+          ? LoginView()
+          : Scaffold(
+              appBar: _appBarList.elementAt(currentViewIdx),
+              bottomNavigationBar: BottomNavigationBar(
+                selectedItemColor: Colors.deepOrange,
+                unselectedItemColor: Colors.black45,
+                items: [
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.home),
+                    label: 'Home',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.text_snippet),
+                    label: 'Riwayat',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.help),
+                    label: 'Bantuan',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.person),
+                    label: 'Profile',
+                  ),
+                ],
+                currentIndex: currentViewIdx,
+                onTap: (index) {
+                  setState(() {
+                    currentViewIdx = index;
+                  });
+                },
               ),
+              body: _contentList.elementAt(currentViewIdx),
             ),
-          ),
     );
   }
 }

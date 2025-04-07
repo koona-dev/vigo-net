@@ -1,5 +1,5 @@
 enum ActivityStatus {
   berhasil,
-  onprogress,
+  menunggu,
   gagal,
 }

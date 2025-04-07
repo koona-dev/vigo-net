@@ -24,7 +24,7 @@ class AuthController {
   final AuthRepository _authRepository = AuthRepository();
   final UserRepository _userRepository = UserRepository();
 
-  User get currentUserLogin => _authRepository.user;
+  User? get currentUserLogin => _authRepository.user;
 
   void signInWithPhone(
     BuildContext context, {
@@ -77,14 +77,19 @@ class AuthController {
     required String password,
   }) async {
     try {
+      print('$username && $password');
       final filter = getFilteredQuery('users', {
         'username': {'isEqualTo', username},
         'password': {'isEqualTo', password}
       });
 
-      final user = await _userRepository.findOne(filter);
+      final user = await _userRepository.findOne(filter: filter);
+
       await _authRepository.loginUser(
-          email: user?.email ?? '', password: password);
+        email: user!.email!,
+        password: password,
+      );
+      print('USER = $user');
 
       return user;
     } on FirebaseException catch (_) {

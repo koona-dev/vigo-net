@@ -8,7 +8,7 @@ class Customer extends Equatable {
   final String nomorInternet;
   final InternetStatus status;
   final InternetData internetData;
-  final String noVa;
+  final String nomorCustomer;
 
   const Customer({
     required this.id,
@@ -16,7 +16,7 @@ class Customer extends Equatable {
     required this.nomorInternet,
     this.status = InternetStatus.online,
     required this.internetData,
-    required this.noVa,
+    required this.nomorCustomer,
   });
 
   factory Customer.fromMap(
@@ -28,7 +28,7 @@ class Customer extends Equatable {
       nomorInternet: data['nomorInternet'],
       status: InternetStatus.values
           .firstWhere((element) => element.name == data['status']),
-      noVa: data['noVa'],
+      nomorCustomer: data['nomorCustomer'],
       internetData: InternetData.fromMap(data['internetData']),
     );
   }
@@ -39,7 +39,7 @@ class Customer extends Equatable {
       'user': user.toMap(),
       'nomorInternet': nomorInternet,
       'status': status,
-      'noVa': noVa,
+      'nomorCustomer': nomorCustomer,
       'internetData': internetData.toMap(),
     };
   }
@@ -50,7 +50,7 @@ class Customer extends Equatable {
         user,
         nomorInternet,
         status,
-        noVa,
+        nomorCustomer,
         internetData,
       ];
 }

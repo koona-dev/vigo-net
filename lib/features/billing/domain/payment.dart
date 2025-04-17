@@ -1,44 +1,108 @@
 import 'package:equatable/equatable.dart';
-import 'package:isp_app/features/user_management/domain/customer.dart';
 
 class Payment extends Equatable {
-  final String orderId;
-  final int grossAmount;
-  final Customer customer;
-  final String paymentType;
-  final MitraBank bankName;
+  final String? id;
+  final String customerId;
+  final PaymentType paymentType;
+  final VaBank vaBank;
+  final String? activeVaBank;
 
   const Payment({
-    required this.orderId,
-    required this.grossAmount,
-    required this.customer,
+    this.id,
+    required this.customerId,
     required this.paymentType,
-    required this.bankName,
+    required this.vaBank,
+    this.activeVaBank,
   });
+
+  factory Payment.fromMap(
+    Map<String, dynamic> data,
+  ) {
+    return Payment(
+      id: data['id'],
+      customerId: data['customerId'],
+      paymentType: PaymentType.values
+          .firstWhere((element) => element.name == data['paymentType']),
+      vaBank: VaBank.fromMap(data['vaBank']),
+      activeVaBank: data['activeVaBank'],
+    );
+  }
 
   Map<String, dynamic> toMap() {
     return {
-      'orderId': orderId,
-      'grossAmount': grossAmount,
-      'paymentType': paymentType,
-      'customer': customer.toMap(),
-      'bankName': bankName.name,
+      'customerId': customerId,
+      'paymentType': paymentType.name,
+      'vaBank': vaBank.toMap(),
+      'activeVaBank': activeVaBank,
     };
   }
 
   @override
   List<Object?> get props => [
-        orderId,
-        grossAmount,
+        id,
+        customerId,
         paymentType,
-        bankName,
-        customer,
+        vaBank,
+        activeVaBank,
       ];
 }
 
-enum MitraBank {
-  bni,
-  bri,
-  bca,
-  mandiri,
+class VaBank {
+  final int bca;
+  final int bni;
+  final int mandiri;
+  final int bri;
+
+  const VaBank({
+    required this.bca,
+    required this.bni,
+    required this.mandiri,
+    required this.bri,
+  });
+
+  factory VaBank.fromMap(
+    Map<String, dynamic> data,
+  ) {
+    return VaBank(
+      bca: data['bca'],
+      bni: data['bni'],
+      mandiri: data['mandiri'],
+      bri: data['bri'],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'bca': bca,
+      'bni': bni,
+      'mandiri': mandiri,
+      'bri': bri,
+    };
+  }
+}
+
+enum PaymentType {
+  bankTransfer(
+    name: "bank_transfer",
+  ),
+  eWallet(
+    name: "e_wallet",
+  ),
+  virtualAccount(
+    name: "virtual_account",
+  ),
+  creditCard(
+    name: "credit_card",
+  ),
+  cod(
+    name: "cod",
+  ),
+  qris(
+    name: "qris",
+  ),
+
+  merchant(name: "merchant");
+
+  final String name;
+  const PaymentType({required this.name});
 }

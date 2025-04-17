@@ -4,6 +4,7 @@ import 'package:isp_app/features/billing/domain/billing_status.dart';
 
 class Billing extends Equatable {
   final String? id;
+  final String nomorTagihan;
   final String customerId;
   final String orderId;
   final String paymentId;
@@ -13,10 +14,10 @@ class Billing extends Equatable {
   final int? denda;
   final Timestamp periodeTagihan;
   final Timestamp batasWaktuTagihan;
-  final String? vaNumber;
 
   const Billing({
     this.id,
+    required this.nomorTagihan,
     required this.customerId,
     required this.orderId,
     required this.paymentId,
@@ -26,7 +27,6 @@ class Billing extends Equatable {
     this.denda,
     required this.periodeTagihan,
     required this.batasWaktuTagihan,
-    this.vaNumber,
   });
 
   factory Billing.fromMap(
@@ -34,6 +34,7 @@ class Billing extends Equatable {
   ) {
     return Billing(
       id: data['id'],
+      nomorTagihan: data['nomorTagihan'],
       customerId: data['customerId'],
       orderId: data['orderId'],
       paymentId: data['paymentId'],
@@ -44,13 +45,13 @@ class Billing extends Equatable {
       batasWaktuTagihan: data['batasWaktuTagihan'],
       periodeTagihan: data['periodeTagihan'],
       totalBill: data['totalBill'],
-      vaNumber: data['vaNumber'],
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'nomorTagihan': nomorTagihan,
       'orderId': orderId,
       'paymentId': paymentId,
       'invoiceNumber': invoiceNumber,
@@ -60,13 +61,13 @@ class Billing extends Equatable {
       'periodeTagihan': periodeTagihan,
       'batasWaktuTagihan': batasWaktuTagihan,
       'status': status,
-      'vaNumber': vaNumber,
     };
   }
 
   @override
   List<Object?> get props => [
         id,
+        nomorTagihan,
         orderId,
         paymentId,
         invoiceNumber,
@@ -76,6 +77,5 @@ class Billing extends Equatable {
         batasWaktuTagihan,
         customerId,
         status,
-        vaNumber,
       ];
 }

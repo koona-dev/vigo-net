@@ -17,7 +17,20 @@ import 'package:isp_app/features/user_management/presentation/user_controller.da
 class BillingController {
   final _billingRepository = BillingRepository();
 
-  Stream<Billing?> currentPendingBilling() {
+  Future<Billing?> showBillingDetails(String billingId) {    
+    return _billingRepository.findOne(docId: billingId);
+  }
+
+  Stream<List<Billing>> showAllBilling(String customerId) {
+    final filter = getFilteredQuery('billing', {
+      'customerId': {
+        'isEqualTo': customerId,
+      },
+    });
+    return _billingRepository.findMany(filter);
+  }
+
+  Stream<Billing?> sendInvoice() {
     final filter = getFilteredQuery('billing', {
       'customerId': {
         'isEqualTo': currentUser?.id,
@@ -26,10 +39,11 @@ class BillingController {
         'isEqualTo': BillingStatus.belumBayar,
       },
     });
+    await _billingRepository.createVAPayment(payment);
     return _billingRepository.findOne(filter: filter);
   }
 
-  void payBill({
+  Future<void> getVaPayment({
     required Customer customer,
     required Billing billing,
     required MitraBank bank,
@@ -43,7 +57,7 @@ class BillingController {
     );
 
     try {
-      await _billingRepository.createVAPayment(payment);
+      
       await _billingRepository.insert(billing);
     } catch (e) {
       rethrow;

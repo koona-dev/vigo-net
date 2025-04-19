@@ -4,6 +4,8 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "install": "pnpm install",
+    "clean": "rm -rf node_modules",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",

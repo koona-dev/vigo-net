@@ -1,14 +1,10 @@
 {
   "name": "backend",
-  "version": "0.1.0",
-  "description": "Developing vigo net backend.",  
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/widnyana18/vigo-net"
-  },
-  "author": "I Komang Widnyana",
-  "license": "MIT",
+  "private": true,
+  "version": "0.1.0",  
   "scripts": {
+    "install": "pnpm install",
+    "clean": "rm -rf node_modules",
     "test": "NODE_ENV=test jest --testTimeout=10000",
     "start": "node src/app.js",    
     "dev": "nodemon src/app.js"

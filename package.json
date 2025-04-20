@@ -1,7 +1,7 @@
 {
   "name": "vigo_net",
   "private": true,
-  "description": "Developing vigo net backend.",  
+  "description": "Developing vigo net backend.",
   "repository": {
     "type": "git",
     "url": "https://github.com/widnyana18/vigo-net"
@@ -9,11 +9,11 @@
   "author": "I Komang Widnyana",
   "license": "MIT",
   "scripts": {
-    "install": "concurrently \"turbo run install --filter=backend\" \"turbo run install --filter=admin-panel\" \"pnpm run install:mobile\"",
+    "install:apps": "concurrently \"turbo run install --filter=backend\" \"turbo run install --filter=admin-panel\" \"pnpm run install:mobile\"",    
     "install:mobile": "cd apps/mobile && flutter pub get",
-    "clean": "concurrently \"turbo run clean --filter=backend\" \"turbo run clean --filter=admin-panel\" \"pnpm run clean:mobile\"",
+    "clean:apps": "concurrently \"turbo run clean --filter=backend\" \"turbo run clean --filter=admin-panel\" \"pnpm run clean:mobile\"",
     "clean:mobile": "cd apps/mobile && flutter clean",
-    "dev": "concurrently \"turbo run dev --filter=backend\" \"turbo run dev --filter=admin-panel\" \"pnpm run dev:mobile\"",   
+    "dev": "concurrently \"turbo run dev --filter=backend\" \"turbo run dev --filter=admin-panel\" \"pnpm run dev:mobile\"",
     "dev:mobile": "cd apps/mobile && flutter emulators --launch Pixel_7_Pro_API_34 && flutter run lib/main.dart",
     "build": "concurrently \"turbo run build --filter=admin-panel\" \"pnpm run build:mobile\"",
     "build:mobile": "cd apps/mobile && flutter build apk --split-per-abi",
@@ -22,10 +22,12 @@
     "check-types": "turbo run check-types"
   },
   "devDependencies": {
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
     "concurrently": "^9.1.2",
     "prettier": "^3.5.3",
     "turbo": "^2.5.0",
-    "typescript": "5.8.2"
+    "typescript": "^5.8.2"
   },
   "packageManager": "pnpm@9.0.0",
   "engines": {

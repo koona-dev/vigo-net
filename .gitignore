@@ -192,3 +192,5 @@ yarn-error.log*
 node_modules
 .pnp
 .pnp.js
+
+vigo-net-firebase-adminsdk.json

@@ -11,7 +11,7 @@ const midtrans = new midtransClient.CoreApi({
   serverKey,
 });
 
-async function createVA(orderId, amount, bank, customerName) {
+export async function createVA(orderId : string, amount : string, bank : string, customerName : string) {
   let parameter = {
     payment_type: "bank_transfer",
     transaction_details: {
@@ -37,7 +37,7 @@ async function createVA(orderId, amount, bank, customerName) {
   }
 }
 
-async function checkPaymentStatus(params) {
+export async function checkPaymentStatus(orderId : string) {
   try {
     return await midtrans.transaction.status(orderId);
   } catch (error) {
@@ -45,4 +45,3 @@ async function checkPaymentStatus(params) {
   }
 }
 
-module.exports = { createVA, checkPaymentStatus };

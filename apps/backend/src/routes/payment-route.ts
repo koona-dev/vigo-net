@@ -1,10 +1,11 @@
-const express = require("express");
-const { createVA, checkPaymentStatus } = require("../services/midtransService");
+import express = require("express");
 
-const router = express.Router();
+import { createVA, checkPaymentStatus } from "../services/midtrans-service";
+
+export const paymentRouter = express.Router();
 
 // Route to create Virtual Account
-router.post("/createVA", async (req, res) => {
+paymentRouter.post("/createVA", async (req, res) => {
   try {
     const { orderId, amount, bank, customerName } = req.body;
     const vaData = await createVA(orderId, amount, bank, customerName);
@@ -14,7 +15,7 @@ router.post("/createVA", async (req, res) => {
   }
 });
 
-router.get("/checkPayment/:orderId", async (req, res) => {
+paymentRouter.get("/checkPayment/:orderId", async (req, res) => {
   try {
     const { orderId } = req.params;
     const transaction = await checkPaymentStatus(orderId);
@@ -23,5 +24,3 @@ router.get("/checkPayment/:orderId", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
-module.exports = router;

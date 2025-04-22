@@ -11,6 +11,8 @@ import compression from "compression";
 import morgan from "morgan";
 import fs from "fs";
 
+import routes from "./routes/routes";
+
 // load env file
 dotenv.config({ path: ".env" });
 

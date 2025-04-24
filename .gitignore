@@ -194,4 +194,4 @@ node_modules
 .pnp
 .pnp.js
 
-**/vigo-net-firebase-adminsdk.json
+apps/backend/vigo-net-firebase-adminsdk.json

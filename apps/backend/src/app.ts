@@ -11,7 +11,7 @@ import compression from "compression";
 import morgan from "morgan";
 import fs from "fs";
 
-import routes from "./routes/routes";
+import AppRoutes from "./routes/routes";
 
 // load env file
 dotenv.config({ path: ".env" });
@@ -50,7 +50,7 @@ app.use((req, res, next) => {
 });
 
 // load routes
-routes(app);
+AppRoutes.endpoint(app);
 
 app.listen("3000", () => {
   console.info(`Server running 🤖🚀 at localhost:3000`);

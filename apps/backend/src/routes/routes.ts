@@ -6,11 +6,11 @@ import { Express } from "express";
 /*
  ** ROUTES
  */
-import authRoute from "./auth-route";
+import UserAccountRoute from "./user-account-route";
 
-// api endpoint
-function routes(app: Express) {
-  app.use("/auth", authRoute);
+export default class AppRoutes {
+  // api endpoint
+  static endpoint(app: Express) {
+    app.use("/user-account", UserAccountRoute.path);
+  }
 }
-
-export default routes;

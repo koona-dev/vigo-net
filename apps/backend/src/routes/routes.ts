@@ -6,11 +6,12 @@ import { Express } from "express";
 /*
  ** ROUTES
  */
-import UserAccountRoute from "./user-account-route";
+import paymentRoute from "./payment-route";
 
-export default class AppRoutes {
-  // api endpoint
-  static endpoint(app: Express) {
-    app.use("/user-account", UserAccountRoute.path);
-  }
+// api endpoint
+export default function routes(app: Express) {
+  app.use('/billing', paymentRoute);
+  app.get("/", (req, res) => {
+    res.send("hello world");
+  });
 }

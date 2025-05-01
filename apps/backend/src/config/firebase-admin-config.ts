@@ -11,7 +11,8 @@ const firebase = admin.apps.length
   : admin.initializeApp({
       credential: admin.credential.cert(
         JSON.parse(JSON.stringify(serviceAccount))
-      ),
+        
+      ), 
     });
 
 /*
@@ -21,4 +22,3 @@ export const firebaseAuth = firebase.auth();
 export const firestore = firebase.firestore();
 export const firebaseStorage = firebase.storage();
 export const cloudMsg = firebase.messaging();
-export const firebaseRealtimeDB = firebase.database();

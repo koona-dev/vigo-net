@@ -3,12 +3,13 @@ import { Request, Response } from "express";
 import UserAccountService from "../services/user-account-service";
 import { User } from "../models/user-account";
 
-export default class UserAccountController {
-  private userAccountService = new UserAccountService();
+let userAccountService = new UserAccountService();
+
+export default class UserAccountController {  
 
   async getOneUser(req: Request, res: Response) {
     const id = req.params.id;
-    const result = await this.userAccountService.findOne(id);
+    const result = await userAccountService.findOne(id);
 
     if (result) {
       res.status(200).json(result.toMap());
@@ -16,18 +17,18 @@ export default class UserAccountController {
   }
 
   async getUsers(req: Request, res: Response) {
-    const filter = JSON.parse(JSON.stringify(req.body)) as {
+    const filter: {
       [key: string]: any;
-    }[];
+    }[] = req.body;
 
-    const result = await this.userAccountService.findMany(filter);
+    const result = await userAccountService.findMany();
 
     res.status(200).json(result.map((user) => user.toMap()));
   }
 
   async createUserAccount(req: Request, res: Response) {
     const data = req.body;
-    await this.userAccountService.create(User.fromMap(data));
+    await userAccountService.create(User.fromMap(data));
     res.status(200).json({ message: "success" });
   }
 
@@ -40,14 +41,14 @@ export default class UserAccountController {
       [field: string]: any;
     };
 
-    await this.userAccountService.update(id, filter, User.fromMap(data));
+    await userAccountService.update(id, filter, User.fromMap(data));
 
     res.status(200).json({ message: "success" });
   }
 
   async deleteUserAccount(req: Request, res: Response) {
     const id = req.params.id;
-    await this.userAccountService.remove(id);
+    await userAccountService.remove(id);
 
     res.status(200).json({ message: "success" });
   }

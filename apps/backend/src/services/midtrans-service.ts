@@ -1,47 +1,42 @@
-const midtransClient = require("midtrans-client");
-const {
-  isProduction,
-  serverKey,
-  clientKey,
-} = require("../config/midtransConfig");
+import Billing from "../models/billing";
 
-const midtrans = new midtransClient.CoreApi({
-  isProduction,
-  clientKey,
-  serverKey,
-});
-
-export async function createVA(orderId : string, amount : string, bank : string, customerName : string) {
-  let parameter = {
-    payment_type: "bank_transfer",
-    transaction_details: {
-      order_id: orderId,
-      gross_amount: amount,
-    },
-    bank_transfer: {
-      bank: bank, // Example: "bca", "bni", "bri"
-    },
-    customer_details: {
-      first_name: customerName,
-    },
-  };
-
-  try {
-    const transaction = await midtrans.charge(parameter);
-    return {
-      va_number: transaction.va_numbers[0].va_number,
-      bank: transaction.va_numbers[0].bank,
+import midtransSnap from "../config/midtrans-config";
+export default class MidtransService {
+  async createVA(billing: Billing): Promise<{ [field: string]: any }> {
+    let parameter = {
+      transaction_details: {
+        order_id: billing.orderId,
+        gross_amount: billing.grossAmount, // Amount in IDR
+      },
+      customer_details: {
+        first_name: billing.firstName,
+        last_name: billing.lastName,
+        email: billing.email,
+        phone: billing.phone,
+      },
+      payment_type: billing.paymentType,
+      bank_transfer: {
+        bank: billing.bank,
+        va_number: billing.vaBank, // Replace with the actual VA number
+      },
     };
-  } catch (error) {
-    throw new Error(error.message);
+
+    try {
+      const transaction = await midtransSnap.createTransactionRedirectUrl(parameter);
+      return {
+        va_number: transaction.va_numbers[0].va_number,
+        bank: transaction.va_numbers[0].bank,
+      };
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  }
+
+  async checkPaymentStatus(orderId: string): Promise<{ [field: string]: any }> {
+    try {
+      return await midtransSnap.transaction.status(orderId);
+    } catch (error: any) {
+      throw new Error(error);
+    }
   }
 }
-
-export async function checkPaymentStatus(orderId : string) {
-  try {
-    return await midtrans.transaction.status(orderId);
-  } catch (error) {
-    throw new Error(error.message);
-  }
-}
-

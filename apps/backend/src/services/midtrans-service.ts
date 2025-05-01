@@ -22,13 +22,13 @@ export default class MidtransService {
     };
 
     try {
-      const transaction = await midtransSnap.createTransactionRedirectUrl(parameter);
-      return {
-        va_number: transaction.va_numbers[0].va_number,
-        bank: transaction.va_numbers[0].bank,
-      };
+      // return {
+      //   va_number: transaction.va_numbers[0].va_number,
+      //   bank: transaction.va_numbers[0].bank,
+      // };
+      return await midtransSnap.createTransactionRedirectUrl(parameter);
     } catch (error: any) {
-      throw new Error(error);
+      throw error;
     }
   }
 
@@ -36,7 +36,7 @@ export default class MidtransService {
     try {
       return await midtransSnap.transaction.status(orderId);
     } catch (error: any) {
-      throw new Error(error);
+      throw error;
     }
   }
 }

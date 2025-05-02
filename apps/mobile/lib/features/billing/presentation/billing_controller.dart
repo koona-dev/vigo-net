@@ -2,22 +2,65 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:isp_app/core/utils/firestore_filter.dart';
 import 'package:isp_app/features/billing/data/billing_repository.dart';
+import 'package:isp_app/features/billing/data/payment_repository.dart';
 import 'package:isp_app/features/billing/domain/billing.dart';
-import 'package:isp_app/features/billing/domain/billing_status.dart';
 import 'package:isp_app/features/billing/domain/payment.dart';
 import 'package:isp_app/features/order_internet/data/order_repository.dart';
-import 'package:isp_app/features/order_internet/domain/order.dart';
-import 'package:isp_app/features/order_internet/domain/types.dart';
-import 'package:isp_app/features/order_internet/presentation/cart_controller.dart';
-import 'package:isp_app/features/user_management/domain/customer.dart';
-import 'package:isp_app/features/user_management/domain/types.dart';
+import 'package:isp_app/features/user_management/data/user_repository.dart';
 import 'package:isp_app/features/user_management/domain/user.dart';
 import 'package:isp_app/features/user_management/presentation/user_controller.dart';
 
 class BillingController {
-  final _billingRepository = BillingRepository();
+  BillingController(Ref ref, {required this.currentUser});
+  final AuthUser currentUser;
 
-  Future<Billing?> showBillingDetails(String billingId) {    
+  final _userController = UserRepository();
+  final _orderRepository = OrderRepository();
+  final _billingRepository = BillingRepository();
+  final _paymentRepository = PaymentRepository();
+
+  Future<void> selectPaymentMethod({
+    required VaBank vaBank,
+    required SelectedBank activeBank,
+  }) {
+    final payment = Payment(
+      customerId: currentUser.id!,
+      paymentType: PaymentType.bankTransfer,
+      vaBank: vaBank,
+      activeVaBank: activeBank,
+    );
+
+    return _paymentRepository.create(payment);
+  }
+
+  Future<String> createInvoice({
+    required Billing billingData,
+  }) async {
+    // final filter = getFilteredQuery('billing', {
+    //   'customerId': {
+    //     'isEqualTo': currentUser.id,
+    //   },
+    //   'status': {
+    //     'isEqualTo': BillingStatus.belumBayar,
+    //   },
+    // });
+    final getCustomer = await _userController.findOne(uid: currentUser.id);
+    final getOrder = await _orderRepository.findOne(docId: billingData.orderId);
+    final getpayment =
+        await _paymentRepository.findOne(docId: billingData.paymentId);
+
+    await _billingRepository.insert(billingData);
+    final snapPayment = await _billingRepository.createVAPayment(
+      user: getCustomer!,
+      order: getOrder!,
+      billing: billingData,
+      payment: getpayment!,
+    );
+
+    return snapPayment['redirect_url'];
+  }
+
+  Future<Billing?> showBillingDetails(String billingId) {
     return _billingRepository.findOne(docId: billingId);
   }
 
@@ -29,60 +72,10 @@ class BillingController {
     });
     return _billingRepository.findMany(filter);
   }
-
-  Stream<Billing?> sendInvoice() {
-    final filter = getFilteredQuery('billing', {
-      'customerId': {
-        'isEqualTo': currentUser?.id,
-      },
-      'status': {
-        'isEqualTo': BillingStatus.belumBayar,
-      },
-    });
-    await _billingRepository.createVAPayment(payment);
-    return _billingRepository.findOne(filter: filter);
-  }
-
-  Future<void> getVaPayment({
-    required Customer customer,
-    required Billing billing,
-    required MitraBank bank,
-  }) async {
-    final payment = Payment(
-      orderId: billing.orderId,
-      grossAmount: billing.totalBill,
-      customer: customer,
-      paymentType: "bank_transfer",
-      bankName: bank,
-    );
-
-    try {
-      
-      await _billingRepository.insert(billing);
-    } catch (e) {
-      rethrow;
-    }
-  }
 }
 
-final orderControllerProvider = Provider.autoDispose((ref) {
+final billingControllerProvider = Provider.autoDispose((ref) {
   final currentUser = ref.watch(userDataProvider).value;
 
-  return BillingController(ref: ref, currentUser: currentUser);
-});
-
-final currentOrderPemasanganProvider = FutureProvider.autoDispose((ref) {
-  final orderController = ref.watch(orderControllerProvider);
-  return orderController.currentOrderPemasangan;
-});
-
-final currentOrderDetailsProvider =
-    FutureProvider.family.autoDispose((ref, String docId) {
-  final orderController = ref.watch(orderControllerProvider);
-  return orderController.currentOrderDetails(docId);
-});
-
-final getOrderByUserProvider = StreamProvider.autoDispose((ref) {
-  final orderController = ref.watch(orderControllerProvider);
-  return orderController.getOrdersByUser();
+  return BillingController(ref, currentUser: currentUser!);
 });

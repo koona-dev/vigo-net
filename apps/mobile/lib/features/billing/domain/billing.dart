@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:isp_app/features/billing/domain/billing_status.dart';
+import 'package:isp_app/features/billing/domain/payment.dart';
+import 'package:isp_app/features/user_management/domain/customer.dart';
 
 class Billing extends Equatable {
   final String? id;
@@ -8,12 +9,13 @@ class Billing extends Equatable {
   final String customerId;
   final String orderId;
   final String paymentId;
+  final Customer? customer;
+  final Payment? payment;
   final String? invoiceNumber;
   final BillingStatus status;
   final int totalBill;
   final int? denda;
-  final Timestamp periodeTagihan;
-  final Timestamp batasWaktuTagihan;
+  final Timestamp tanggalTagihan;
 
   const Billing({
     this.id,
@@ -21,13 +23,36 @@ class Billing extends Equatable {
     required this.customerId,
     required this.orderId,
     required this.paymentId,
+    this.customer,
+    this.payment,
     this.invoiceNumber,
     required this.status,
     required this.totalBill,
     this.denda,
-    required this.periodeTagihan,
-    required this.batasWaktuTagihan,
+    required this.tanggalTagihan,
   });
+
+  Billing copyWith({
+    String? invoiceNumber,
+    BillingStatus? status,
+    int? totalBill,
+    int? denda,
+    Timestamp? tanggalTagihan,
+  }) {
+    return Billing(
+      nomorTagihan: nomorTagihan,
+      customerId: customerId,
+      orderId: orderId,
+      paymentId: paymentId,
+      customer: customer,
+      payment: payment,
+      invoiceNumber: invoiceNumber ?? this.invoiceNumber,
+      status: status ?? this.status,
+      totalBill: totalBill ?? this.totalBill,
+      denda: denda ?? this.denda,
+      tanggalTagihan: tanggalTagihan ?? this.tanggalTagihan,
+    );
+  }
 
   factory Billing.fromMap(
     Map<String, dynamic> data,
@@ -42,8 +67,7 @@ class Billing extends Equatable {
       invoiceNumber: data['invoiceNumber'],
       status: BillingStatus.values
           .firstWhere((element) => element.name == data['status']),
-      batasWaktuTagihan: data['batasWaktuTagihan'],
-      periodeTagihan: data['periodeTagihan'],
+      tanggalTagihan: data['tanggalTagihan'],
       totalBill: data['totalBill'],
     );
   }
@@ -58,8 +82,7 @@ class Billing extends Equatable {
       'customerId': customerId,
       'totalBill': totalBill,
       'denda': denda,
-      'periodeTagihan': periodeTagihan,
-      'batasWaktuTagihan': batasWaktuTagihan,
+      'tanggalTagihan': tanggalTagihan,
       'status': status,
     };
   }
@@ -71,11 +94,18 @@ class Billing extends Equatable {
         orderId,
         paymentId,
         invoiceNumber,
+        customer,
+        payment,
         totalBill,
         denda,
-        periodeTagihan,
-        batasWaktuTagihan,
+        tanggalTagihan,
         customerId,
         status,
       ];
+}
+
+enum BillingStatus {
+  belumBayar,
+  lunas,
+  expired,
 }

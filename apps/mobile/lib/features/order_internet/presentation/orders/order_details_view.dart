@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:isp_app/core/conststans/product_type.dart';
 import 'package:isp_app/features/order_internet/domain/order.dart';
+import 'package:isp_app/features/ticketing/domain/activity.dart';
+import 'package:isp_app/features/ticketing/domain/activity_states/activity_status.dart';
 import 'package:isp_app/features/ticketing/domain/activity_states/instalation_wifi_state.dart';
 import 'package:isp_app/features/ticketing/presentation/ticketing_controller.dart';
 import 'package:isp_app/features/user_management/presentation/user_controller.dart';
@@ -137,11 +139,17 @@ class _OrderDetailsViewState extends ConsumerState<OrderDetailsView> {
                       ? FilledButton(
                           onPressed: () {
                             ref
-                                .read(ticketingControllerProvider.notifier)
-                                .updateTicket(
-                                  ticketId: currentTicket.id!,
-                                  activity: InstalationWifiState.bayarInstalasi,
-                                );
+                                .read(ticketingControllerProvider)
+                                .updateActivityTicket(currentTicket.copyWith(
+                                  activity: Activity(
+                                    title: 'Pemasangan Berhasil',
+                                    description:
+                                        'Silahkan lakukan pembayaran instalasi',
+                                    status: ActivityStatus.menunggu,
+                                    flag: InstalationWifiState
+                                        .bayarInstalasi.name,
+                                  ),
+                                ));
                           },
                           child: Text('Bayar Instalasi'),
                         )

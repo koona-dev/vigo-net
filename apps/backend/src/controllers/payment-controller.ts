@@ -8,7 +8,7 @@ const midtransService = new MidtransService();
 export default class PaymentController {
   async createTransaction(req: Request, res: Response) {
     try {
-      const billingData = Billing.fromMap(req.body);
+      const billingData = JSON.parse(req.body);
 
       const result = await midtransService.createVA(billingData);
 

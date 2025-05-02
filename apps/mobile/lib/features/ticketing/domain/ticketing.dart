@@ -27,6 +27,23 @@ class Ticketing extends Equatable {
     required this.endDate,
   });
 
+  Ticketing copyWith({
+    TicketStatus? status,
+    Activity? activity,
+  }) {
+    return Ticketing(
+      status: status ?? this.status,
+      activity: activity ?? this.activity,
+      id: id,
+      userId: userId,
+      title: title,
+      description: description,
+      category: category,
+      startDate: startDate,
+      endDate: endDate,
+    );
+  }
+
   factory Ticketing.fromMap(
     Map<String, dynamic> data,
   ) {

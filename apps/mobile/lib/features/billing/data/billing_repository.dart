@@ -1,48 +1,79 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
+import 'package:isp_app/core/conststans/product_type.dart';
 
 import 'package:isp_app/features/billing/domain/billing.dart';
 import 'package:isp_app/features/billing/domain/payment.dart';
-import 'package:isp_app/features/user_management/domain/customer.dart';
+import 'package:isp_app/features/order_internet/domain/order.dart';
+import 'package:isp_app/features/user_management/domain/user.dart';
 
 class BillingRepository {
   final _firestore = FirebaseFirestore.instance;
-  final _authString = "SB-Mid-server-m5hByDg5YQ_jdrKKnn8rJYz7:";
+  // final _authString = "SB-Mid-server-m5hByDg5YQ_jdrKKnn8rJYz7:";
 
   Future<Map<String, dynamic>> createVAPayment({
-    required Customer customer,
+    required AuthUser user,
+    required Orders order,
     required Billing billing,
     required Payment payment,
-    required String bankName,
-    required String vaNumber,
   }) async {
-    var url =
-        Uri.parse("https://app.sandbox.midtrans.com/snap/v1/transactions");
+    final url = Uri.parse("localhostt:8080/api/billing/create-va");
 
     try {
+      final internetItem = order.cartItems
+          .firstWhere((element) => element.productType == ProductType.internet);
+
       final response = await http.post(
         url,
         headers: {
-          "Authorization": "Basic " + base64Encode(utf8.encode(_authString)),
+          // "Authorization": "Basic " + base64Encode(utf8.encode(_authString)),
           "Content-Type": "application/json",
         },
         body: jsonEncode({
           "transaction_details": {
-            "order_id": billing.orderId,
+            "order_id": billing.invoiceNumber,
             "gross_amount": billing.totalBill, // Amount in IDR
           },
+          "item_details": [
+            {
+              "id": internetItem.productType,
+              "name": internetItem.productName,
+              "quantity": internetItem.qty,
+              "price": internetItem.price,
+            }
+          ],
           "customer_details": {
-            "first_name": customer.user.username,
-            "last_name": customer.user.name,
-            "email": customer.user.email,
-            "phone": customer.user.phone,
+            "first_name": user.username,
+            "last_name": user.name,
+            "email": user.email,
+            "phone": user.phone,
           },
           "payment_type": payment.paymentType,
-          "bank_transfer": {
-            "bank": bankName,
-            "va_number": vaNumber, // Replace with the actual VA number
-          }
+          // "bank_transfer": {
+          //   "bank": payment.activeVaBank.name,
+          //   "va_number": payment.vaBank.selectBank(billing
+          //       .payment.activeVaBank), // Replace with the actual VA number
+          // },
+          "enabled_payments": [
+            "gopay",
+            "bca_va",
+            "bni_va",
+            "bri_va",
+            "echannel",
+            "Indomaret",
+            "alfamart",
+          ],
+          "bca_va": {
+            "va_number": payment.vaBank.bca,
+          },
+          "bni_va": {"va_number": payment.vaBank.bni},
+          "bri_va": {"va_number": payment.vaBank.bri},
+          "expiry": {
+            "start_time": billing.tanggalTagihan.toDate().toString(),
+            "unit": "days",
+            "duration": 7
+          },
         }),
       );
 
@@ -52,14 +83,15 @@ class BillingRepository {
     }
   }
 
-  Future<Map<String, dynamic>> checkPaymentStatus(String orderId) async {
-    var url = Uri.parse("https://api.sandbox.midtrans.com/v2/$orderId/status");
+  Future<Map<String, dynamic>> checkPaymentStatus(String invoiceNumber) async {
+    final url =
+        Uri.parse("localhostt:8080/api/billing/check-payment/$invoiceNumber");
 
     try {
       final response = await http.get(
         url,
         headers: {
-          "Authorization": "Basic " + base64Encode(utf8.encode(_authString)),
+          // "Authorization": "Basic " + base64Encode(utf8.encode(_authString)),
           "Content-Type": "application/json",
         },
       );
@@ -78,7 +110,7 @@ class BillingRepository {
     }
   }
 
-  Future<Billing?> findOne({String? docId, Query? filter}) async {
+  Future<Billing> findOne({String? docId, Query? filter}) async {
     if (docId != null) {
       return await _firestore
           .collection('billing')
@@ -90,7 +122,7 @@ class BillingRepository {
       });
     }
 
-    return await filter?.limit(1).get().then((QuerySnapshot querySnapshot) {
+    return await filter!.limit(1).get().then((QuerySnapshot querySnapshot) {
       final doc = querySnapshot.docs.first;
       return Billing.fromMap(
           {'id': doc.id, ...doc.data() as Map<String, dynamic>});

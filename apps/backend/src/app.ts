@@ -40,6 +40,6 @@ app.use(morgan("combined", { stream: accessLogStream }));
 
 routes(app);
 
-app.listen("3000", () => {
+app.listen("8080", () => {
   console.info(`Server running 🤖🚀 at localhost:3000`);
 });

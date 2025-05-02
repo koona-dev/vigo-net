@@ -10,7 +10,7 @@ import paymentRoute from "./payment-route";
 
 // api endpoint
 export default function routes(app: Express) {
-  app.use('/billing', paymentRoute);
+  app.use('/api/billing', paymentRoute);
   app.get("/", (req, res) => {
     res.send("hello world");
   });

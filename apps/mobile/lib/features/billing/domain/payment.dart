@@ -5,7 +5,7 @@ class Payment extends Equatable {
   final String customerId;
   final PaymentType paymentType;
   final VaBank vaBank;
-  final String? activeVaBank;
+  final SelectedBank? activeVaBank;
 
   const Payment({
     this.id,
@@ -48,10 +48,10 @@ class Payment extends Equatable {
 }
 
 class VaBank {
-  final int bca;
-  final int bni;
-  final int mandiri;
-  final int bri;
+  final String bca;
+  final String bni;
+  final String mandiri;
+  final String bri;
 
   const VaBank({
     required this.bca,
@@ -79,6 +79,26 @@ class VaBank {
       'bri': bri,
     };
   }
+
+  String selectBank(SelectedBank? bank) {
+    switch (bank!) {
+      case SelectedBank.bca:
+        return bca;
+      case SelectedBank.bni:
+        return bni;
+      case SelectedBank.mandiri:
+        return mandiri;
+      case SelectedBank.bri:
+        return bri;
+    }
+  }
+}
+
+enum SelectedBank {
+  bca,
+  bni,
+  mandiri,
+  bri;
 }
 
 enum PaymentType {

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:isp_app/features/user_management/domain/user.dart';
+import 'package:vigo_net_mobile/features/user_management/domain/user.dart';
 
 class UserRepository {
   final _firestore = FirebaseFirestore.instance;

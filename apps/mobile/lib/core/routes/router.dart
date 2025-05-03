@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:isp_app/features/authentication/presentation/auth/login_view.dart';
-import 'package:isp_app/features/authentication/presentation/auth/otp_view.dart';
-import 'package:isp_app/features/authentication/presentation/auth/register_view.dart';
-import 'package:isp_app/features/authentication/presentation/auth/reset_password_view.dart';
-import 'package:isp_app/features/authentication/presentation/auth/signin_phone_number_view.dart';
-import 'package:isp_app/features/catalog_product/presentation/products/product_view.dart';
-import 'package:isp_app/features/order_internet/domain/order.dart';
-import 'package:isp_app/features/order_internet/presentation/orders/order_details_view.dart';
-import 'package:isp_app/features/order_internet/presentation/orders/order_view.dart';
-import 'package:isp_app/features/user_management/presentation/dashboard_view.dart';
-import 'package:isp_app/features/user_management/presentation/profile/user_information_view.dart';
-import 'package:isp_app/shared/widgets/error.dart';
+import 'package:vigo_net_mobile/features/authentication/presentation/auth/login_view.dart';
+import 'package:vigo_net_mobile/features/authentication/presentation/auth/otp_view.dart';
+import 'package:vigo_net_mobile/features/authentication/presentation/auth/register_view.dart';
+import 'package:vigo_net_mobile/features/authentication/presentation/auth/reset_password_view.dart';
+import 'package:vigo_net_mobile/features/authentication/presentation/auth/signin_phone_number_view.dart';
+import 'package:vigo_net_mobile/features/catalog_product/presentation/products/product_view.dart';
+import 'package:vigo_net_mobile/features/order_internet/domain/order.dart';
+import 'package:vigo_net_mobile/features/order_internet/presentation/orders/order_details_view.dart';
+import 'package:vigo_net_mobile/features/order_internet/presentation/orders/order_view.dart';
+import 'package:vigo_net_mobile/features/user_management/presentation/dashboard_view.dart';
+import 'package:vigo_net_mobile/features/user_management/presentation/profile/user_information_view.dart';
+import 'package:vigo_net_mobile/shared/widgets/error.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {

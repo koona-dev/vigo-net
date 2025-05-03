@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:isp_app/core/conststans/product_type.dart';
-import 'package:isp_app/features/order_internet/domain/cart.dart';
-import 'package:isp_app/features/order_internet/domain/checkout.dart';
-import 'package:isp_app/features/user_management/domain/user.dart';
-import 'package:isp_app/features/user_management/presentation/user_controller.dart';
+import 'package:vigo_net_mobile/core/conststans/product_type.dart';
+import 'package:vigo_net_mobile/features/order_internet/domain/cart.dart';
+import 'package:vigo_net_mobile/features/order_internet/domain/checkout.dart';
+import 'package:vigo_net_mobile/features/user_management/domain/user.dart';
+import 'package:vigo_net_mobile/features/user_management/presentation/user_controller.dart';
 
 class CartNotifier extends ChangeNotifier {
   final AuthUser currentUser;

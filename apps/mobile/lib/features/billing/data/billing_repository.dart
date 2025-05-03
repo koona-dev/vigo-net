@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
-import 'package:isp_app/core/conststans/product_type.dart';
+import 'package:vigo_net_mobile/core/conststans/product_type.dart';
 
-import 'package:isp_app/features/billing/domain/billing.dart';
-import 'package:isp_app/features/billing/domain/payment.dart';
-import 'package:isp_app/features/order_internet/domain/order.dart';
-import 'package:isp_app/features/user_management/domain/user.dart';
+import 'package:vigo_net_mobile/features/billing/domain/billing.dart';
+import 'package:vigo_net_mobile/features/billing/domain/payment.dart';
+import 'package:vigo_net_mobile/features/order_internet/domain/order.dart';
+import 'package:vigo_net_mobile/features/user_management/domain/user.dart';
 
 class BillingRepository {
   final _firestore = FirebaseFirestore.instance;

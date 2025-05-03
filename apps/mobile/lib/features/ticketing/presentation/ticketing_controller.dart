@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:isp_app/core/utils/firestore_filter.dart';
-import 'package:isp_app/features/ticketing/data/ticketing_repository.dart';
-import 'package:isp_app/features/ticketing/domain/category.dart';
-import 'package:isp_app/features/ticketing/domain/ticketing.dart';
+import 'package:vigo_net_mobile/core/utils/firestore_filter.dart';
+import 'package:vigo_net_mobile/features/ticketing/data/ticketing_repository.dart';
+import 'package:vigo_net_mobile/features/ticketing/domain/category.dart';
+import 'package:vigo_net_mobile/features/ticketing/domain/ticketing.dart';
 
 class TicketingController {
   final Ref ref;

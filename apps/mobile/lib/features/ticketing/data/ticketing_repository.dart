@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:isp_app/features/ticketing/domain/ticketing.dart';
+import 'package:vigo_net_mobile/features/ticketing/domain/ticketing.dart';
 
 class TicketingRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

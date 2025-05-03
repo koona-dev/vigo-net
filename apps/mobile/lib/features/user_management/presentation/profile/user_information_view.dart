@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:isp_app/core/utils/file_galery.dart';
-import 'package:isp_app/features/user_management/presentation/dashboard_view.dart';
-import 'package:isp_app/features/user_management/presentation/user_controller.dart';
+import 'package:vigo_net_mobile/core/utils/file_galery.dart';
+import 'package:vigo_net_mobile/features/user_management/presentation/dashboard_view.dart';
+import 'package:vigo_net_mobile/features/user_management/presentation/user_controller.dart';
 
 class UserInformationView extends ConsumerStatefulWidget {
   const UserInformationView({Key? key}) : super(key: key);

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:isp_app/features/billing/domain/payment.dart';
+import 'package:vigo_net_mobile/features/billing/domain/payment.dart';
 
 class PaymentRepository {
   final _firestore = FirebaseFirestore.instance;

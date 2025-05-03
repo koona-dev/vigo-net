@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:isp_app/features/billing/domain/payment.dart';
-import 'package:isp_app/features/user_management/domain/customer.dart';
+import 'package:vigo_net_mobile/features/billing/domain/payment.dart';
+import 'package:vigo_net_mobile/features/user_management/domain/customer.dart';
 
 class Billing extends Equatable {
   final String? id;

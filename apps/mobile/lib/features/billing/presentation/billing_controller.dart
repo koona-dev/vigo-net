@@ -1,14 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:isp_app/core/utils/firestore_filter.dart';
-import 'package:isp_app/features/billing/data/billing_repository.dart';
-import 'package:isp_app/features/billing/data/payment_repository.dart';
-import 'package:isp_app/features/billing/domain/billing.dart';
-import 'package:isp_app/features/billing/domain/payment.dart';
-import 'package:isp_app/features/order_internet/data/order_repository.dart';
-import 'package:isp_app/features/user_management/data/user_repository.dart';
-import 'package:isp_app/features/user_management/domain/user.dart';
-import 'package:isp_app/features/user_management/presentation/user_controller.dart';
+import 'package:vigo_net_mobile/core/utils/firestore_filter.dart';
+import 'package:vigo_net_mobile/features/billing/data/billing_repository.dart';
+import 'package:vigo_net_mobile/features/billing/data/payment_repository.dart';
+import 'package:vigo_net_mobile/features/billing/domain/billing.dart';
+import 'package:vigo_net_mobile/features/billing/domain/payment.dart';
+import 'package:vigo_net_mobile/features/order_internet/data/order_repository.dart';
+import 'package:vigo_net_mobile/features/user_management/data/user_repository.dart';
+import 'package:vigo_net_mobile/features/user_management/domain/user.dart';
+import 'package:vigo_net_mobile/features/user_management/presentation/user_controller.dart';
 
 class BillingController {
   BillingController(Ref ref, {required this.currentUser});

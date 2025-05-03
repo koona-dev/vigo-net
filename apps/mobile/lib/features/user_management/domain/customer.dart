@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:isp_app/features/user_management/domain/types.dart';
-import 'package:isp_app/features/user_management/domain/user.dart';
+import 'package:vigo_net_mobile/features/user_management/domain/types.dart';
+import 'package:vigo_net_mobile/features/user_management/domain/user.dart';
 
 class Customer extends Equatable {
   final String id;

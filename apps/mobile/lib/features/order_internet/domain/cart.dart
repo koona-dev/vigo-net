@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:isp_app/core/conststans/product_type.dart';
+import 'package:vigo_net_mobile/core/conststans/product_type.dart';
 
 class Cart extends Equatable {
   final String productId;

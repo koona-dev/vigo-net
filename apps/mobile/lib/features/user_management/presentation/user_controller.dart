@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:isp_app/core/services/image_service.dart';
-import 'package:isp_app/features/authentication/data/auth_repository.dart';
-import 'package:isp_app/features/user_management/data/user_repository.dart';
-import 'package:isp_app/features/user_management/domain/user.dart';
+import 'package:vigo_net_mobile/core/services/image_service.dart';
+import 'package:vigo_net_mobile/features/authentication/data/auth_repository.dart';
+import 'package:vigo_net_mobile/features/user_management/data/user_repository.dart';
+import 'package:vigo_net_mobile/features/user_management/domain/user.dart';
 
 final userControllerProvider = Provider.autoDispose((ref) {
   return UserController(ref);

@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:isp_app/features/ticketing/domain/ticket_status.dart';
-import 'package:isp_app/features/order_internet/domain/cart.dart';
-import 'package:isp_app/features/order_internet/domain/types.dart';
+import 'package:vigo_net_mobile/features/ticketing/domain/ticket_status.dart';
+import 'package:vigo_net_mobile/features/order_internet/domain/cart.dart';
+import 'package:vigo_net_mobile/features/order_internet/domain/types.dart';
 
 class Orders extends Equatable {
   final String? id;

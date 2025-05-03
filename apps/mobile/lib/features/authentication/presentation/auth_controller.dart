@@ -1,12 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:isp_app/core/utils/firestore_filter.dart';
-import 'package:isp_app/features/authentication/data/auth_repository.dart';
-import 'package:isp_app/features/user_management/data/user_repository.dart';
+import 'package:vigo_net_mobile/core/utils/firestore_filter.dart';
+import 'package:vigo_net_mobile/features/authentication/data/auth_repository.dart';
+import 'package:vigo_net_mobile/features/user_management/data/user_repository.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:isp_app/features/user_management/domain/user.dart';
+import 'package:vigo_net_mobile/features/user_management/domain/user.dart';
 
 final authControllerProvider = Provider.autoDispose((ref) {
   return AuthController();

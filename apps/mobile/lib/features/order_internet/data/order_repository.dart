@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:isp_app/features/order_internet/domain/order.dart';
+import 'package:vigo_net_mobile/features/order_internet/domain/order.dart';
 
 class OrderRepository {
   final _firestore = FirebaseFirestore.instance;

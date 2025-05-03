@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "type": "commonjs",
   "scripts": {
-    "clean": "rm -rf dist node_modules",
+    "clean": "rm -r -fo dist node_modules",
     "test": "NODE_ENV=test jest --testTimeout=10000",
     "start": "tsx src/app.ts",
     "dev": "tsx watch src/app.ts",

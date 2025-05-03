@@ -1,13 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:isp_app/core/utils/firestore_filter.dart';
-import 'package:isp_app/features/order_internet/data/order_repository.dart';
-import 'package:isp_app/features/order_internet/domain/order.dart';
-import 'package:isp_app/features/order_internet/domain/types.dart';
-import 'package:isp_app/features/order_internet/presentation/cart_controller.dart';
-import 'package:isp_app/features/user_management/domain/types.dart';
-import 'package:isp_app/features/user_management/domain/user.dart';
-import 'package:isp_app/features/user_management/presentation/user_controller.dart';
+import 'package:vigo_net_mobile/core/utils/firestore_filter.dart';
+import 'package:vigo_net_mobile/features/order_internet/data/order_repository.dart';
+import 'package:vigo_net_mobile/features/order_internet/domain/order.dart';
+import 'package:vigo_net_mobile/features/order_internet/domain/types.dart';
+import 'package:vigo_net_mobile/features/order_internet/presentation/cart_controller.dart';
+import 'package:vigo_net_mobile/features/user_management/domain/types.dart';
+import 'package:vigo_net_mobile/features/user_management/domain/user.dart';
+import 'package:vigo_net_mobile/features/user_management/presentation/user_controller.dart';
 
 class OrderController {
   final AuthUser? currentUser;

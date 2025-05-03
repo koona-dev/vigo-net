@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:isp_app/core/utils/firestore_filter.dart';
-import 'package:isp_app/features/catalog_product/data/product_repository.dart';
-import 'package:isp_app/features/catalog_product/domain/product.dart';
+import 'package:vigo_net_mobile/core/utils/firestore_filter.dart';
+import 'package:vigo_net_mobile/features/catalog_product/data/product_repository.dart';
+import 'package:vigo_net_mobile/features/catalog_product/domain/product.dart';
 
 final productDataProvider = FutureProvider.autoDispose((ref) {
   final productController = ProductController();

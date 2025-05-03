@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:isp_app/features/authentication/presentation/auth/login_view.dart';
-import 'package:isp_app/features/authentication/presentation/auth_controller.dart';
+import 'package:vigo_net_mobile/features/authentication/presentation/auth/login_view.dart';
+import 'package:vigo_net_mobile/features/authentication/presentation/auth_controller.dart';
 
 class RegisterView extends ConsumerStatefulWidget {
   const RegisterView({Key? key}) : super(key: key);

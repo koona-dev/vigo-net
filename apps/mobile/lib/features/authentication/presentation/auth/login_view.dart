@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:isp_app/features/authentication/presentation/auth/reset_password_view.dart';
-import 'package:isp_app/features/authentication/presentation/auth/signin_phone_number_view.dart';
-import 'package:isp_app/features/authentication/presentation/auth_controller.dart';
-import 'package:isp_app/features/user_management/presentation/dashboard_view.dart';
+import 'package:vigo_net_mobile/features/authentication/presentation/auth/reset_password_view.dart';
+import 'package:vigo_net_mobile/features/authentication/presentation/auth/signin_phone_number_view.dart';
+import 'package:vigo_net_mobile/features/authentication/presentation/auth_controller.dart';
+import 'package:vigo_net_mobile/features/user_management/presentation/dashboard_view.dart';
 
 class LoginView extends ConsumerStatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -65,6 +65,14 @@ class _LoginViewState extends ConsumerState<LoginView> {
                 fontFamily: 'SF Pro Text',
                 fontWeight: FontWeight.w700,
                 height: 0.06,
+              ),
+            ),
+            Text(
+              'Hello, Selamat datang kembali 👋🏽',
+              style: TextStyle(
+                color: Colors.grey[800],
+                fontSize: 12,
+                fontFamily: 'SF Pro Text',
               ),
             ),
             SizedBox(height: 52),

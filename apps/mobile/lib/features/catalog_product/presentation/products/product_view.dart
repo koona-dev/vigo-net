@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:isp_app/core/conststans/product_type.dart';
-import 'package:isp_app/features/catalog_product/presentation/product_controller.dart';
-import 'package:isp_app/features/order_internet/presentation/cart_controller.dart';
-import 'package:isp_app/features/order_internet/presentation/orders/order_view.dart';
-import 'package:isp_app/shared/widgets/error.dart';
+import 'package:vigo_net_mobile/core/conststans/product_type.dart';
+import 'package:vigo_net_mobile/features/catalog_product/presentation/product_controller.dart';
+import 'package:vigo_net_mobile/features/order_internet/presentation/cart_controller.dart';
+import 'package:vigo_net_mobile/features/order_internet/presentation/orders/order_view.dart';
+import 'package:vigo_net_mobile/shared/widgets/error.dart';
 
 class ProductView extends ConsumerStatefulWidget {
   const ProductView({Key? key}) : super(key: key);

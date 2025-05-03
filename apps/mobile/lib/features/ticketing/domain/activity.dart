@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:isp_app/features/ticketing/domain/activity_states/activity_status.dart';
+import 'package:vigo_net_mobile/features/ticketing/domain/activity_states/activity_status.dart';
 
 class Activity extends Equatable {
   final String title;

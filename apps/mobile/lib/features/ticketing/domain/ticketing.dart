@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:isp_app/features/ticketing/domain/category.dart';
-import 'package:isp_app/features/ticketing/domain/ticket_status.dart';
-import 'package:isp_app/features/ticketing/domain/activity.dart';
+import 'package:vigo_net_mobile/features/ticketing/domain/category.dart';
+import 'package:vigo_net_mobile/features/ticketing/domain/ticket_status.dart';
+import 'package:vigo_net_mobile/features/ticketing/domain/activity.dart';
 
 class Ticketing extends Equatable {
   final String? id;

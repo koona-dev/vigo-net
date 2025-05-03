@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:isp_app/features/order_internet/domain/cart.dart';
+import 'package:vigo_net_mobile/features/order_internet/domain/cart.dart';
 
 class CheckoutNote extends Equatable {
   final String nama;

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:isp_app/features/user_management/domain/types.dart';
+import 'package:vigo_net_mobile/features/user_management/domain/types.dart';
 
 class AuthUser extends Equatable {
   final String? id;

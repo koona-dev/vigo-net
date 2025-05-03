@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:isp_app/features/catalog_product/domain/product.dart';
+import 'package:vigo_net_mobile/features/catalog_product/domain/product.dart';
 
 class ProductRepository {
   Future<Internet> getOneInternet(String docId) async {

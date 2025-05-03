@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:isp_app/features/catalog_product/presentation/products/product_view.dart';
-import 'package:isp_app/features/order_internet/domain/order.dart';
-import 'package:isp_app/features/order_internet/presentation/order_controller.dart';
-import 'package:isp_app/features/order_internet/presentation/orders/order_details_view.dart';
-import 'package:isp_app/features/ticketing/presentation/ticketing_controller.dart';
-import 'package:isp_app/features/user_management/domain/user.dart';
-import 'package:isp_app/features/user_management/presentation/profile/user_information_view.dart';
-import 'package:isp_app/features/user_management/presentation/user_controller.dart';
-import 'package:isp_app/shared/widgets/error.dart';
+import 'package:vigo_net_mobile/features/authentication/presentation/auth/login_view.dart';
+import 'package:vigo_net_mobile/features/authentication/presentation/auth_controller.dart';
+import 'package:vigo_net_mobile/features/catalog_product/presentation/products/product_view.dart';
+import 'package:vigo_net_mobile/features/order_internet/domain/order.dart';
+import 'package:vigo_net_mobile/features/order_internet/presentation/order_controller.dart';
+import 'package:vigo_net_mobile/features/order_internet/presentation/orders/order_details_view.dart';
+import 'package:vigo_net_mobile/features/ticketing/presentation/ticketing_controller.dart';
+import 'package:vigo_net_mobile/features/user_management/domain/user.dart';
+import 'package:vigo_net_mobile/features/user_management/presentation/profile/user_information_view.dart';
+import 'package:vigo_net_mobile/features/user_management/presentation/user_controller.dart';
+import 'package:vigo_net_mobile/shared/widgets/error.dart';
 
 class DashboardView extends ConsumerStatefulWidget {
   const DashboardView({Key? key}) : super(key: key);
@@ -108,6 +110,13 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
                   },
                 )
               : SizedBox.shrink(),
+          FilledButton(
+              onPressed: () {
+                ref.read(authControllerProvider).signOut();
+                Navigator.pushNamedAndRemoveUntil(
+                    context, LoginView.routeName, ModalRoute.withName('/'));
+              },
+              child: Text('Log out'))
         ],
       ),
     );

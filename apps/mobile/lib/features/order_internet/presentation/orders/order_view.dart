@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:isp_app/core/conststans/product_type.dart';
-import 'package:isp_app/features/order_internet/presentation/cart_controller.dart';
-import 'package:isp_app/features/order_internet/presentation/order_controller.dart';
-import 'package:isp_app/features/ticketing/domain/activity.dart';
-import 'package:isp_app/features/ticketing/domain/activity_states/activity_status.dart';
-import 'package:isp_app/features/ticketing/domain/activity_states/instalation_wifi_state.dart';
-import 'package:isp_app/features/ticketing/domain/category.dart';
-import 'package:isp_app/features/ticketing/domain/ticket_status.dart';
-import 'package:isp_app/features/ticketing/domain/ticketing.dart';
-import 'package:isp_app/features/ticketing/presentation/ticketing_controller.dart';
-import 'package:isp_app/features/user_management/presentation/dashboard_view.dart';
-import 'package:isp_app/features/user_management/presentation/user_controller.dart';
+import 'package:vigo_net_mobile/core/conststans/product_type.dart';
+import 'package:vigo_net_mobile/features/order_internet/presentation/cart_controller.dart';
+import 'package:vigo_net_mobile/features/order_internet/presentation/order_controller.dart';
+import 'package:vigo_net_mobile/features/ticketing/domain/activity.dart';
+import 'package:vigo_net_mobile/features/ticketing/domain/activity_states/activity_status.dart';
+import 'package:vigo_net_mobile/features/ticketing/domain/activity_states/instalation_wifi_state.dart';
+import 'package:vigo_net_mobile/features/ticketing/domain/category.dart';
+import 'package:vigo_net_mobile/features/ticketing/domain/ticket_status.dart';
+import 'package:vigo_net_mobile/features/ticketing/domain/ticketing.dart';
+import 'package:vigo_net_mobile/features/ticketing/presentation/ticketing_controller.dart';
+import 'package:vigo_net_mobile/features/user_management/presentation/dashboard_view.dart';
+import 'package:vigo_net_mobile/features/user_management/presentation/user_controller.dart';
 
 class OrderView extends ConsumerStatefulWidget {
   static const routeName = '/my-order';

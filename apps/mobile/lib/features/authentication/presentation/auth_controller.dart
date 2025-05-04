@@ -97,8 +97,26 @@ class AuthController {
     }
   }
 
-  void resetPassword(String password) async {
-    await _userRepository.update(AuthUser(password: password));
+  Future<String?> resetPassword(String password, String confirmPsw) async {
+    if (password == confirmPsw) {
+      final checkPsw = await _userRepository.findOne(
+        filter: getFilteredQuery(
+          'users',
+          {
+            'password': {'isEqualTo', confirmPsw},
+          },
+        ),
+      );
+
+      if (checkPsw == null) {
+        await _userRepository.update(AuthUser(password: password));
+      } else {
+        return 'Password Sudah Digunakan';
+      }
+    } else {
+      return 'Password tidak sama';
+    }
+    return null;
   }
 
   void signOut() async {
